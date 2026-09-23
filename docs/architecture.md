@@ -45,5 +45,6 @@ Vercel is the intended deployment platform. Supabase provides the hosted Postgre
 - Prefer server-rendered EJS pages over a frontend framework.
 - Prefer a small number of modules with clear responsibilities over abstractions without a current use.
 - Keep the FAQ algorithm deterministic and explainable.
+- FAQ matching loads active records and uses normalized meaningful-token overlap in application code. A 50% overlap threshold prevents weak matches; unmatched questions receive a contact-support fallback.
 - Use PostgreSQL constraints for data integrity and application checks for workflow rules.
 - Do not add AI, machine learning, external chatbot services, or unrelated features.

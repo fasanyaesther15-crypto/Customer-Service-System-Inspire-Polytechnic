@@ -76,6 +76,16 @@ h3 { font-size: 1.55rem; }
 .process-step h2 { margin: 3rem 0 0.75rem; font-size: 1.5rem; }
 .admissions-note { margin-top: 5rem; }
 .faq-list, .announcement-list { max-width: 850px; }
+.faq-search { max-width: 850px; margin-bottom: 4rem; padding: 1.5rem; background: var(--cream); }
+.faq-search-form { display: grid; gap: 0.65rem; }
+.faq-search-form label { font-weight: bold; }
+.faq-search-row { display: flex; gap: 0.75rem; }
+.faq-search-row input { min-width: 0; flex: 1; border: 1px solid #b9b1a3; border-radius: 2px; padding: 0.8rem; color: var(--ink); background: var(--paper); font: inherit; }
+.faq-search-row .button { cursor: pointer; }
+.faq-result { margin-top: 1.5rem; padding: 1.5rem; border-left: 4px solid var(--green); background: var(--paper); }
+.faq-result h2 { margin-bottom: 0.75rem; font-size: 1.7rem; }
+.faq-result p:not(.eyebrow) { color: var(--muted); line-height: 1.65; }
+.faq-result-fallback { border-left-color: var(--rust); }
 .faq-category { margin-bottom: 3rem; }
 .faq-item { border-top: 1px solid var(--line); }
 .faq-item:last-child { border-bottom: 1px solid var(--line); }
@@ -159,6 +169,7 @@ h3 { font-size: 1.55rem; }
   .page-shell { padding-top: 3.5rem; padding-bottom: 3.5rem; }
   h1 { font-size: clamp(2.8rem, 15vw, 4.5rem); }
   .feature-grid, .process-grid, .form-grid { grid-template-columns: 1fr; }
+  .faq-search-row { align-items: stretch; flex-direction: column; }
   .feature-card, .process-step { min-height: auto; }
   .site-footer-inner { display: block; }
   .portal-summary, .page-heading-row, .ticket-header { display: block; }

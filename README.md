@@ -197,7 +197,7 @@ The quick assistant follows a transparent deterministic process:
 1. Normalize the submitted question by lowercasing it and removing irrelevant punctuation.
 2. Tokenize the question and remove empty tokens and a small agreed stop-word list.
 3. Compare the input tokens against each active FAQ question and keyword tokens.
-4. Calculate a simple score from matching question and keyword tokens, with exact keyword/question matches receiving the strongest weight.
+4. Calculate a simple score from the number of unique query tokens found in the normalized FAQ question or keyword array.
 5. Select the highest-scoring FAQ.
 6. Return its answer only when the score meets the configured confidence threshold.
 7. Otherwise return a clear escalation response that offers human support through a ticket or live chat.
@@ -306,4 +306,4 @@ The Express application will be deployed as a Vercel serverless web application 
 
 ## Project Status
 
-Phase 5 student portal and ticket workflow complete. Support-agent/admin ticket handling, FAQ matching automation, live chat, and administration remain unimplemented until their approved phases.
+Phase 6 deterministic FAQ system complete. Support-agent/admin ticket handling, live chat, and administration remain unimplemented until their approved phases.

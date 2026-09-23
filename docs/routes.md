@@ -11,10 +11,10 @@ Routes are grouped by access level. Exact controller filenames may be chosen dur
 | GET | `/programmes` | Programmes page. |
 | GET | `/admissions` | Admissions page. |
 | GET | `/faq` | Public FAQ page. |
+| POST | `/faq` | Validate a question, compare it with active FAQ records, and render a match or fallback. |
 | GET | `/announcements` | Published announcements. |
 | GET | `/contact` | General enquiry form. |
 | POST | `/contact` | Validate and store a contact message. |
-| POST | `/faq/ask` | Match a question against active FAQs and return an answer or escalation. |
 
 ## Authentication Routes
 
@@ -31,6 +31,8 @@ Login and registration endpoints must use appropriate rate limits and server-sid
 Registration always creates a `student` account; the submitted form cannot select or create `support_agent` or `administrator` accounts. Successful login regenerates the session and stores only the user's `id`, `fullName`, `email`, and `role`. Logout is a `POST` request so session invalidation is not triggered by a normal link visit.
 
 Phase 4 implements the public informational pages and the general enquiry form. FAQ and announcement pages read only active/published records from PostgreSQL and show explicit empty states when no records exist. The contact form validates and stores a `contact_messages` record; it does not create a ticket. The FAQ page is a browse-only interface in this phase and does not perform automated matching.
+
+Phase 6 adds deterministic FAQ matching to `POST /faq`. The server loads active FAQ records from PostgreSQL, normalizes and tokenizes the question, scores meaningful token overlap against each FAQ question and keyword array, and accepts the best result only when its score reaches the documented 50% threshold. Otherwise it renders a fallback linking to contact support. This is not AI, semantic search, or a chatbot.
 
 ## Student Routes
 

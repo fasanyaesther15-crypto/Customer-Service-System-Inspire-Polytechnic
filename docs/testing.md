@@ -39,6 +39,8 @@ Phase 4 includes live Supabase public-site tests for the Home, About, Programmes
 
 Phase 5 includes live Supabase tests for guest rejection, student dashboard/ticket access, new-ticket validation, transactional ticket and initial-message persistence, ticket ownership, own-ticket detail access, own-ticket follow-up messages, and rejection of unauthorized detail/message requests. Generated users, tickets, and messages are removed after the suite.
 
+Phase 6 includes deterministic matcher unit tests for normalization, punctuation, stop words, scoring, threshold behavior, and tie ordering. Live Supabase FAQ tests verify active-only reads, database-backed answers, inactive-record exclusion, matched queries, fallback queries, empty input, and maximum-length validation. Generated FAQ records are removed after the suite. No AI, machine learning, embeddings, vector search, semantic search, or external chatbot service is used.
+
 ### Socket.IO tests
 
 Test that:

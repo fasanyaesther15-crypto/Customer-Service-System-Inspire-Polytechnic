@@ -4,8 +4,21 @@
   <header class="page-intro page-intro-compact">
     <p class="eyebrow">Knowledge base</p>
     <h1>Frequently asked questions.</h1>
-    <p class="lead">Browse the currently published answers. Automated question matching will be connected in a later phase.</p>
+    <p class="lead">Browse published answers or ask a question. Matches are based on the words in the current FAQ knowledge base.</p>
   </header>
+  <section class="faq-search">
+    <p class="eyebrow">Find an answer</p>
+    <form method="post" action="/faq" class="faq-search-form">
+      <label for="question">Your question</label>
+      <div class="faq-search-row"><input id="question" name="question" type="text" value="<%= question %>" maxlength="500" placeholder="How do I apply for admission?" required><button class="button button-primary" type="submit">Find answer</button></div>
+    </form>
+    <% if (faqError) { %><p class="form-errors" role="alert"><%= faqError %></p><% } %>
+    <% if (faqResult && faqResult.type === 'match') { %>
+      <div class="faq-result faq-result-match" role="status"><p class="eyebrow">FAQ match<% if (faqResult.match.faq.category) { %> / <%= faqResult.match.faq.category %><% } %></p><h2><%= faqResult.match.faq.question %></h2><p><%= faqResult.match.faq.answer %></p></div>
+    <% } else if (faqResult && faqResult.type === 'fallback') { %>
+      <div class="faq-result faq-result-fallback" role="status"><p class="eyebrow">No matching FAQ</p><h2>We could not find a matching answer.</h2><p><%= faqResult.message %></p><a class="button button-primary" href="/contact">Contact support</a></div>
+    <% } %>
+  </section>
   <% const categoryNames = Object.keys(categories); %>
   <% if (!categoryNames.length) { %>
     <section class="empty-state"><p class="eyebrow">No published FAQs</p><h2>The FAQ knowledge base is being prepared.</h2><p>Send a general enquiry if you need help before an answer is published.</p><a class="button button-primary" href="/contact">Contact support</a></section>

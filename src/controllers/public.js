@@ -1,4 +1,10 @@
 const { query } = require('../config/database');
+const { findActiveFaqs } = require('../models/faq');
+const {
+  findBestMatch,
+  MAX_QUESTION_LENGTH,
+  tokenize
+} = require('../services/faqMatcher');
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,20 +30,68 @@ function showAdmissions(request, response) {
 
 async function showFaq(request, response, next) {
   try {
-    const result = await query(
-      `SELECT id, question, answer, category
-       FROM faqs
-       WHERE is_active = true
-       ORDER BY category, question`
-    );
-    const categories = result.rows.reduce((groups, faq) => {
+    const result = await findActiveFaqs();
+    const categories = result.reduce((groups, faq) => {
       const category = faq.category || 'General';
       groups[category] = groups[category] || [];
       groups[category].push(faq);
       return groups;
     }, {});
 
-    return response.render('faq', pageData('FAQ', { categories }));
+    return response.render('faq', pageData('FAQ', {
+      categories,
+      question: '',
+      faqResult: null,
+      faqError: null
+    }));
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function askFaq(request, response, next) {
+  const question = String(request.body.question || '').trim();
+
+  if (!question || question.length > MAX_QUESTION_LENGTH) {
+    return renderFaqResult(response, question, {
+      message: question ? `Question must be ${MAX_QUESTION_LENGTH} characters or fewer.` : 'Enter a question to search the FAQ.',
+      type: 'error'
+    }, next);
+  }
+
+  try {
+    const faqs = await findActiveFaqs();
+    const match = findBestMatch(question, faqs);
+
+    return renderFaqResult(response, question, match ? {
+      match,
+      type: 'match'
+    } : {
+      message: 'We could not find a matching FAQ. Please contact support or submit a support enquiry.',
+      type: 'fallback'
+    }, next);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function renderFaqResult(response, question, result, next) {
+  try {
+    const faqs = await findActiveFaqs();
+    const categories = faqs.reduce((groups, faq) => {
+      const category = faq.category || 'General';
+      groups[category] = groups[category] || [];
+      groups[category].push(faq);
+      return groups;
+    }, {});
+
+    return response.status(result.type === 'error' ? 400 : 200).render('faq', pageData('FAQ', {
+      categories,
+      question,
+      faqResult: result,
+      faqError: result.type === 'error' ? result.message : null,
+      matchedTokens: result.match ? tokenize(question) : []
+    }));
   } catch (error) {
     return next(error);
   }
@@ -121,6 +175,7 @@ async function submitContact(request, response, next) {
 module.exports = {
   showAbout,
   showAdmissions,
+  askFaq,
   showAnnouncements,
   showContact,
   showFaq,
