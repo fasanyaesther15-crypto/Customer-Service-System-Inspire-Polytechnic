@@ -1,0 +1,14 @@
+<%- include('../partials/head', { pageTitle }) %>
+<%- include('../partials/navigation') %>
+<main class="page-shell portal-page">
+  <p class="eyebrow"><a href="/support/chats">Chat monitoring</a> / Chat session</p>
+  <h1>Chat session.</h1>
+  <p class="lead">Status: <%= session.status %></p>
+  <div class="message-list">
+    <% messages.forEach((message) => { %>
+      <article class="message-item"><div class="message-meta"><strong><%= message.sender_name %></strong><span><%= new Date(message.created_at).toLocaleString() %></span></div><p><%= message.message %></p></article>
+    <% }); %>
+  </div>
+  <% if (session.status !== 'closed') { %><form method="post" action="/support/chats/<%= session.id %>/close"><button class="button button-primary" type="submit">Close chat</button></form><% } %>
+</main>
+<%- include('../partials/footer') %>

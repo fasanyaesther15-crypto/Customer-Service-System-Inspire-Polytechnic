@@ -18,6 +18,10 @@
         <% if (currentUser.role === 'student') { %>
           <a href="/student/dashboard">Student portal</a>
           <a href="/student/tickets">Tickets</a>
+          <a href="/student/chat">Live chat</a>
+        <% } else if (currentUser.role === 'support_agent' || currentUser.role === 'administrator') { %>
+          <a href="/support/dashboard">Support dashboard</a>
+          <% if (currentUser.role === 'administrator') { %><a href="/admin/dashboard">Administration</a><% } %>
         <% } %>
         <span class="signed-in">Signed in as <%= currentUser.fullName %></span>
         <form method="post" action="/logout" class="nav-form"><button type="submit" class="nav-action">Log out</button></form>

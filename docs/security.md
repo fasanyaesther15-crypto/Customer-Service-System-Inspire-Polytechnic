@@ -28,6 +28,8 @@ Phase 3 implements `requireAuth` and `requireRole` middleware. Registration vali
 
 Phase 5 applies both middleware functions to every student portal route. Ticket reads require `tickets.student_id = $1`, and ticket message reads and inserts also join or filter through the authenticated student's ticket ownership. Ticket creation derives the owner from the session and uses a transaction for the ticket and initial message, so a client cannot submit another user's ID or create only half of a ticket workflow.
 
+Phase 7 authenticates Socket.IO connections from the existing session and authorizes chat session lookup, room joins, history, messages, typing, and closure. Students are restricted to their own sessions; support agents and administrators may monitor authorized staff sessions. Phase 8 protects support routes with `support_agent` or `administrator` roles and administrator routes with `administrator` only. Staff operations use server-side session identity, allowed status/role values, validated UUIDs, record-existence checks, and parameterized SQL. Administrators cannot remove or deactivate their own administrator access.
+
 ## Input and Output
 
 - Validate required fields, lengths, allowed enum values, and email format on the server.

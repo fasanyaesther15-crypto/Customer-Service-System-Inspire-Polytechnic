@@ -46,5 +46,7 @@ Vercel is the intended deployment platform. Supabase provides the hosted Postgre
 - Prefer a small number of modules with clear responsibilities over abstractions without a current use.
 - Keep the FAQ algorithm deterministic and explainable.
 - FAQ matching loads active records and uses normalized meaningful-token overlap in application code. A 50% overlap threshold prevents weak matches; unmatched questions receive a contact-support fallback.
+- Phase 7 uses the existing Express session with Socket.IO's engine middleware. Authorized chat events join `chat:<sessionId>` rooms, persist messages in PostgreSQL, and re-check session ownership for every operation.
+- Phase 8 uses role-protected server-rendered support and administrator routes. Support agents manage tickets and monitor chats; administrators manage users, FAQs, announcements, and activity logs.
 - Use PostgreSQL constraints for data integrity and application checks for workflow rules.
 - Do not add AI, machine learning, external chatbot services, or unrelated features.

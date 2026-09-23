@@ -1,0 +1,16 @@
+const express = require('express');
+const { requireAuth, requireRole } = require('../middleware/auth');
+const controller = require('../controllers/staff');
+const router = express.Router();
+const support = [requireAuth, requireRole('support_agent', 'administrator')];
+router.get('/dashboard', support, controller.dashboard);
+router.get('/tickets', support, controller.tickets);
+router.get('/tickets/:id', support, controller.ticket);
+router.post('/tickets/:id/assign', support, controller.assignTicket);
+router.post('/tickets/:id/status', support, controller.updateTicket);
+router.post('/tickets/:id/messages', support, controller.message);
+router.get('/chats', support, controller.chats);
+router.get('/chats/:id', support, controller.chatDetail);
+router.post('/chats/:id/assign', support, controller.assignChat);
+router.post('/chats/:id/close', support, controller.closeChat);
+module.exports = router;

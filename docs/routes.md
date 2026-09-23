@@ -46,8 +46,10 @@ All implemented routes below require an authenticated student session and the `s
 | POST | `/student/tickets` | Create a ticket and initial message. |
 | GET | `/student/tickets/:ticketId` | Ticket details and conversation history. |
 | POST | `/student/tickets/:ticketId/messages` | Add a student ticket reply. |
+| GET | `/student/chat` | Student chat session page. |
+| POST | `/student/chat` | Create or reuse the student's open chat session. |
 
-Student ticket creation inserts the ticket and its initial description as the first `ticket_messages` record in one PostgreSQL transaction. Students can view status but cannot change it. Student FAQ, chat, and authenticated announcement routes remain reserved for later phases.
+Student ticket creation inserts the ticket and its initial description as the first `ticket_messages` record in one PostgreSQL transaction. Students can view status but cannot change it. Student chat uses authenticated Socket.IO events and session ownership checks.
 
 ## Support-Agent Routes
 
@@ -74,12 +76,9 @@ All routes below require the administrator role.
 | --- | --- | --- |
 | GET | `/admin/dashboard` | Administrative overview. |
 | GET | `/admin/users` | Manage users and staff access. |
-| POST | `/admin/users/:userId/status` | Activate or deactivate a user. |
-| POST | `/admin/users/:userId/role` | Manage permitted staff role changes. |
+| POST | `/admin/users/:userId` | Update a user's validated role and active state. |
 | GET | `/admin/faqs` | List FAQ records. |
-| GET | `/admin/faqs/new` | New FAQ form. |
 | POST | `/admin/faqs` | Create an FAQ. |
-| GET | `/admin/faqs/:faqId/edit` | Edit FAQ form. |
 | POST | `/admin/faqs/:faqId` | Update or activate/deactivate an FAQ. |
 | GET | `/admin/announcements` | Manage announcements. |
 | POST | `/admin/announcements` | Create or publish an announcement. |

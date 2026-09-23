@@ -1,0 +1,12 @@
+<%- include('../partials/head', { pageTitle }) %>
+<%- include('../partials/navigation') %>
+<main class="page-shell portal-page">
+  <header class="page-intro page-intro-compact"><p class="eyebrow">Student portal</p><h1>Live support chat.</h1><p class="lead">Start a persistent support conversation with an authorized support agent.</p></header>
+  <% if (!activeSession) { %>
+    <section class="empty-state"><h2>No chat session yet.</h2><p>Start a chat when you need human support.</p><form method="post" action="/student/chat"><button class="button button-primary" type="submit">Start chat</button></form></section>
+  <% } else { %>
+    <section class="chat-panel" data-chat-session="<%= activeSession.id %>"><div class="chat-toolbar"><div><p class="eyebrow">Session</p><strong class="chat-state"><%= activeSession.status %></strong></div><button class="button button-quiet" type="button" data-close-chat>Close chat</button></div><div class="chat-messages" data-chat-messages><p class="chat-placeholder">Connecting to support...</p></div><form class="chat-form" data-chat-form><input name="message" type="text" maxlength="10000" placeholder="Write a message" required><button class="button button-primary" type="submit">Send</button></form><p class="chat-error" data-chat-error role="alert"></p></section>
+  <% } %>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<%- include('../partials/footer') %>

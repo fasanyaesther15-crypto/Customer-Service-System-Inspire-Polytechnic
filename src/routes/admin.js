@@ -1,0 +1,15 @@
+const express = require('express');
+const { requireAuth, requireRole } = require('../middleware/auth');
+const controller = require('../controllers/staff');
+const router = express.Router();
+const admin = [requireAuth, requireRole('administrator')];
+router.get('/dashboard', admin, controller.adminDashboard);
+router.get('/users', admin, controller.users);
+router.post('/users/:id', admin, controller.updateUser);
+router.get('/faqs', admin, controller.faqs);
+router.post('/faqs', admin, controller.saveFaq);
+router.post('/faqs/:id', admin, controller.saveFaq);
+router.get('/announcements', admin, controller.announcements);
+router.post('/announcements', admin, controller.createAnnouncement);
+router.get('/activity-logs', admin, controller.activityLogs);
+module.exports = router;

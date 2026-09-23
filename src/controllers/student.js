@@ -6,6 +6,7 @@ const {
   findTicketMessagesByStudent,
   findTicketsByStudent
 } = require('../models/ticket');
+  const { createChatSession, findOpenChatForStudent, findChatSessionsByStudent } = require('../models/chat');
 
 const priorities = ['low', 'medium', 'high', 'urgent'];
 
@@ -123,6 +124,20 @@ async function showTicket(request, response, next) {
 }
 
 async function addTicketMessage(request, response, next) {
+
+  async function showChat(request, response, next) {
+    try {
+      const sessions = await findChatSessionsByStudent(request.session.user.id);
+      return response.render('student/chat', { pageTitle: 'Live support chat', sessions, activeSession: sessions[0] || null });
+    } catch (error) { return next(error); }
+  }
+
+  async function startChat(request, response, next) {
+    try {
+      const session = await findOpenChatForStudent(request.session.user.id) || await createChatSession(request.session.user.id);
+      return response.redirect(`/student/chat?session=${session.id}`);
+    } catch (error) { return next(error); }
+  }
   const message = String(request.body.message || '').trim();
   const errors = [];
 
@@ -168,6 +183,29 @@ async function addTicketMessage(request, response, next) {
   }
 }
 
+async function showChat(request, response, next) {
+  try {
+    const sessions = await findChatSessionsByStudent(request.session.user.id);
+    return response.render('student/chat', {
+      pageTitle: 'Live support chat',
+      sessions,
+      activeSession: sessions[0] || null
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function startChat(request, response, next) {
+  try {
+    const session = await findOpenChatForStudent(request.session.user.id)
+      || await createChatSession(request.session.user.id);
+    return response.redirect(`/student/chat?session=${session.id}`);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   addTicketMessage,
   createTicket,
@@ -175,6 +213,8 @@ module.exports = {
   showNewTicket,
   showTicket,
   showTickets,
+  showChat,
+  startChat,
   ticketValues,
   validateTicket
 };

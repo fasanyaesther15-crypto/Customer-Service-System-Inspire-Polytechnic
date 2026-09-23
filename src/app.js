@@ -12,6 +12,9 @@ const { getPool } = require('./config/database');
 const authRoutes = require('./routes/auth');
 const publicRoutes = require('./routes/public');
 const studentRoutes = require('./routes/student');
+const supportRoutes = require('./routes/support');
+const adminRoutes = require('./routes/admin');
+const { registerChatHandlers } = require('./services/chat');
 
 const app = express();
 const server = http.createServer(app);
@@ -33,7 +36,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(publicDirectory));
-app.use(session({
+const sessionMiddleware = session({
   store: new PgSession({
     pool: getPool(),
     tableName: 'session'
@@ -47,7 +50,8 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production',
     maxAge: 1000 * 60 * 60 * 8
   }
-}));
+});
+app.use(sessionMiddleware);
 app.use((request, response, next) => {
   response.locals.currentUser = request.session.user || null;
   response.locals.currentPath = request.path;
@@ -67,10 +71,18 @@ app.get('/health', (request, response) => {
 app.use('/', authRoutes);
 app.use('/', publicRoutes);
 app.use('/student', studentRoutes);
+app.use('/support', supportRoutes);
+app.use('/admin', adminRoutes);
 
-io.on('connection', (socket) => {
-  socket.emit('foundation:ready', { status: 'ok' });
+io.engine.use(sessionMiddleware);
+io.use((socket, next) => {
+  if (!socket.request.session || !socket.request.session.user) {
+    return next(new Error('Authentication required.'));
+  }
+
+  return next();
 });
+registerChatHandlers(io);
 
 app.use((request, response) => {
   response.status(404).render('error', {

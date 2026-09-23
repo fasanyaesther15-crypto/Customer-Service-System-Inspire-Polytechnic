@@ -306,4 +306,4 @@ The Express application will be deployed as a Vercel serverless web application 
 
 ## Project Status
 
-Phase 6 deterministic FAQ system complete. Support-agent/admin ticket handling, live chat, and administration remain unimplemented until their approved phases.
+Phase 8 support-agent and administrator workflows complete. Deployment remains, and no later functionality beyond the documented chat/support/administration scope is implemented.
