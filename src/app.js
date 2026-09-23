@@ -11,6 +11,7 @@ const { Server } = require('socket.io');
 const { getPool } = require('./config/database');
 const authRoutes = require('./routes/auth');
 const publicRoutes = require('./routes/public');
+const studentRoutes = require('./routes/student');
 
 const app = express();
 const server = http.createServer(app);
@@ -65,6 +66,7 @@ app.get('/health', (request, response) => {
 
 app.use('/', authRoutes);
 app.use('/', publicRoutes);
+app.use('/student', studentRoutes);
 
 io.on('connection', (socket) => {
   socket.emit('foundation:ready', { status: 'ok' });

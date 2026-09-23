@@ -1,0 +1,29 @@
+<%- include('../partials/head', { pageTitle }) %>
+<%- include('../partials/navigation') %>
+<main class="page-shell portal-page">
+  <header class="page-intro page-intro-compact">
+    <p class="eyebrow">Student portal</p>
+    <h1>Welcome, <%= currentUser.fullName %>.</h1>
+    <p class="lead">Keep your customer service requests in one clear place.</p>
+  </header>
+  <section class="portal-summary">
+    <div><span class="summary-number"><%= ticketCount %></span><span class="summary-label">Total tickets</span></div>
+    <a class="button button-primary" href="/student/tickets/new">Create a ticket</a>
+  </section>
+  <section class="portal-section">
+    <div class="section-heading"><div><p class="eyebrow">Recent activity</p><h2>Your latest tickets.</h2></div><a class="text-link" href="/student/tickets">View all tickets <span aria-hidden="true">→</span></a></div>
+    <% if (!recentTickets.length) { %>
+      <div class="empty-state"><h2>No tickets yet.</h2><p>When you need help, create a support ticket and follow the conversation here.</p><a class="button button-primary" href="/student/tickets/new">Create your first ticket</a></div>
+    <% } else { %>
+      <div class="ticket-list">
+        <% recentTickets.forEach((ticket) => { %>
+          <a class="ticket-row" href="/student/tickets/<%= ticket.id %>">
+            <span><strong><%= ticket.subject %></strong><small><%= ticket.category %> · <%= new Date(ticket.updated_at).toLocaleDateString() %></small></span>
+            <span class="status-badge status-<%= ticket.status.replaceAll(' ', '-') %>"><%= ticket.status %></span>
+          </a>
+        <% }); %>
+      </div>
+    <% } %>
+  </section>
+</main>
+<%- include('../partials/footer') %>

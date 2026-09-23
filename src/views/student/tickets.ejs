@@ -1,0 +1,21 @@
+<%- include('../partials/head', { pageTitle }) %>
+<%- include('../partials/navigation') %>
+<main class="page-shell portal-page">
+  <header class="page-intro page-intro-compact page-heading-row">
+    <div><p class="eyebrow">Student portal</p><h1>My tickets.</h1><p class="lead">Review your support requests and their current status.</p></div>
+    <a class="button button-primary" href="/student/tickets/new">Create a ticket</a>
+  </header>
+  <% if (!tickets.length) { %>
+    <section class="empty-state"><p class="eyebrow">No support requests</p><h2>Your ticket list is empty.</h2><p>Create a ticket when you need help from the customer service team.</p><a class="button button-primary" href="/student/tickets/new">Create a ticket</a></section>
+  <% } else { %>
+    <div class="ticket-list">
+      <% tickets.forEach((ticket) => { %>
+        <a class="ticket-row" href="/student/tickets/<%= ticket.id %>">
+          <span><strong><%= ticket.subject %></strong><small><%= ticket.category %> · <%= new Date(ticket.created_at).toLocaleDateString() %> · Updated <%= new Date(ticket.updated_at).toLocaleDateString() %></small></span>
+          <span class="ticket-meta"><span class="priority-label"><%= ticket.priority %></span><span class="status-badge status-<%= ticket.status.replaceAll(' ', '-') %>"><%= ticket.status %></span></span>
+        </a>
+      <% }); %>
+    </div>
+  <% } %>
+</main>
+<%- include('../partials/footer') %>

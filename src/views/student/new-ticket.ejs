@@ -1,0 +1,24 @@
+<%- include('../partials/head', { pageTitle }) %>
+<%- include('../partials/navigation') %>
+<main class="page-shell portal-page">
+  <header class="page-intro page-intro-compact">
+    <p class="eyebrow">Student portal / new request</p>
+    <h1>Create a support ticket.</h1>
+    <p class="lead">Describe your question clearly so the customer service team can help.</p>
+  </header>
+  <% if (errors.length) { %><div class="form-errors" role="alert"><% errors.forEach((error) => { %><p><%= error %></p><% }); %></div><% } %>
+  <form method="post" action="/student/tickets" class="ticket-form">
+    <label for="subject">Subject</label>
+    <input id="subject" name="subject" type="text" value="<%= values.subject %>" maxlength="200" required>
+    <label for="category">Category</label>
+    <input id="category" name="category" type="text" value="<%= values.category %>" maxlength="100" placeholder="For example: admissions" required>
+    <label for="priority">Priority</label>
+    <select id="priority" name="priority">
+      <% priorities.forEach((priority) => { %><option value="<%= priority %>" <%= values.priority === priority ? 'selected' : '' %>><%= priority %></option><% }); %>
+    </select>
+    <label for="message">Description</label>
+    <textarea id="message" name="message" rows="9" maxlength="10000" required><%= values.message %></textarea>
+    <div class="button-row"><button class="button button-primary" type="submit">Submit ticket</button><a class="button button-quiet" href="/student/tickets">Cancel</a></div>
+  </form>
+</main>
+<%- include('../partials/footer') %>

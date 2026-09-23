@@ -34,7 +34,7 @@ Phase 4 implements the public informational pages and the general enquiry form. 
 
 ## Student Routes
 
-All routes below require an authenticated student session and ownership checks.
+All implemented routes below require an authenticated student session and the `student` role. Ticket detail and message operations enforce ownership in their SQL queries.
 
 | Method | Path | Purpose |
 | --- | --- | --- |
@@ -44,10 +44,8 @@ All routes below require an authenticated student session and ownership checks.
 | POST | `/student/tickets` | Create a ticket and initial message. |
 | GET | `/student/tickets/:ticketId` | Ticket details and conversation history. |
 | POST | `/student/tickets/:ticketId/messages` | Add a student ticket reply. |
-| GET | `/student/faq` | Authenticated FAQ view. |
-| GET | `/student/chat` | Chat view and available session. |
-| POST | `/student/chat` | Start a chat session where needed. |
-| GET | `/student/announcements` | Student announcement list. |
+
+Student ticket creation inserts the ticket and its initial description as the first `ticket_messages` record in one PostgreSQL transaction. Students can view status but cannot change it. Student FAQ, chat, and authenticated announcement routes remain reserved for later phases.
 
 ## Support-Agent Routes
 

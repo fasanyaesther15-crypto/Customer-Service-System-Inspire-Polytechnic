@@ -276,7 +276,7 @@ Prerequisites are Node.js, npm, and a Supabase project or compatible PostgreSQL 
 5. Start the Express application with the project development script.
 6. Run the documented tests before making a deployment build.
 
-Phase 1 includes the initial Express application, package scripts, EJS homepage, public assets, and guarded database connection module. Later feature modules remain unimplemented.
+Phase 5 includes the authenticated student portal and student-owned support ticket workflow. Support-agent/admin ticket handling, FAQ automation, live chat, and advanced student features remain unimplemented.
 
 ## 24. Supabase Setup
 
@@ -306,4 +306,4 @@ The Express application will be deployed as a Vercel serverless web application 
 
 ## Project Status
 
-Phase 4 public website complete. Tickets, FAQ matching automation, live chat, student portal, and administration remain unimplemented until their approved phases.
+Phase 5 student portal and ticket workflow complete. Support-agent/admin ticket handling, FAQ matching automation, live chat, and administration remain unimplemented until their approved phases.

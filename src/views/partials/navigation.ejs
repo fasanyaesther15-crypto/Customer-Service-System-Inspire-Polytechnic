@@ -15,6 +15,10 @@
       <a class="<%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
       <span class="nav-divider" aria-hidden="true"></span>
       <% if (currentUser) { %>
+        <% if (currentUser.role === 'student') { %>
+          <a href="/student/dashboard">Student portal</a>
+          <a href="/student/tickets">Tickets</a>
+        <% } %>
         <span class="signed-in">Signed in as <%= currentUser.fullName %></span>
         <form method="post" action="/logout" class="nav-form"><button type="submit" class="nav-action">Log out</button></form>
       <% } else { %>

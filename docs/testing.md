@@ -37,6 +37,8 @@ Phase 3 currently includes live Supabase authentication tests using a temporary 
 
 Phase 4 includes live Supabase public-site tests for the Home, About, Programmes, Admissions, FAQ, Announcements, and Contact pages. They also verify invalid contact input, successful contact persistence, the default `new` status, and that the contact form does not create tickets. Generated contact test data is removed after the suite.
 
+Phase 5 includes live Supabase tests for guest rejection, student dashboard/ticket access, new-ticket validation, transactional ticket and initial-message persistence, ticket ownership, own-ticket detail access, own-ticket follow-up messages, and rejection of unauthorized detail/message requests. Generated users, tickets, and messages are removed after the suite.
+
 ### Socket.IO tests
 
 Test that:

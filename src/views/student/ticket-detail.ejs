@@ -1,0 +1,27 @@
+<%- include('../partials/head', { pageTitle }) %>
+<%- include('../partials/navigation') %>
+<main class="page-shell portal-page">
+  <p class="eyebrow"><a href="/student/tickets">My tickets</a> / Ticket details</p>
+  <header class="ticket-header">
+    <div><h1><%= ticket.subject %></h1><p class="lead"><%= ticket.category %> · Created <%= new Date(ticket.created_at).toLocaleDateString() %></p></div>
+    <span class="status-badge status-<%= ticket.status.replaceAll(' ', '-') %>"><%= ticket.status %></span>
+  </header>
+  <div class="ticket-detail-grid">
+    <section>
+      <h2>Conversation</h2>
+      <div class="message-list">
+        <% messages.forEach((message) => { %>
+          <article class="message-item"><div class="message-meta"><strong><%= message.sender_name %></strong><span><%= new Date(message.created_at).toLocaleString() %></span></div><p><%= message.message %></p></article>
+        <% }); %>
+      </div>
+      <% if (errors.length) { %><div class="form-errors" role="alert"><% errors.forEach((error) => { %><p><%= error %></p><% }); %></div><% } %>
+      <form method="post" action="/student/tickets/<%= ticket.id %>/messages" class="ticket-form message-form">
+        <label for="message">Add a message</label>
+        <textarea id="message" name="message" rows="6" maxlength="10000" required></textarea>
+        <button class="button button-primary" type="submit">Send message</button>
+      </form>
+    </section>
+    <aside class="ticket-facts"><p class="eyebrow">Ticket summary</p><dl><dt>Status</dt><dd><%= ticket.status %></dd><dt>Priority</dt><dd><%= ticket.priority %></dd><dt>Category</dt><dd><%= ticket.category %></dd><dt>Last updated</dt><dd><%= new Date(ticket.updated_at).toLocaleDateString() %></dd></dl></aside>
+  </div>
+</main>
+<%- include('../partials/footer') %>

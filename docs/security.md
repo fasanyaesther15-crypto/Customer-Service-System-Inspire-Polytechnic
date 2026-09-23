@@ -26,6 +26,8 @@ Protect account credentials, sessions, student records, staff operations, ticket
 
 Phase 3 implements `requireAuth` and `requireRole` middleware. Registration validates name, email, password length, and confirmation, then inserts only the `student` role. Login uses a generic invalid-credentials response, compares passwords with bcryptjs, regenerates the session after success, and never places the password or password hash in the session. Sessions use the existing PostgreSQL `session` table through connect-pg-simple.
 
+Phase 5 applies both middleware functions to every student portal route. Ticket reads require `tickets.student_id = $1`, and ticket message reads and inserts also join or filter through the authenticated student's ticket ownership. Ticket creation derives the owner from the session and uses a transaction for the ticket and initial message, so a client cannot submit another user's ID or create only half of a ticket workflow.
+
 ## Input and Output
 
 - Validate required fields, lengths, allowed enum values, and email format on the server.
