@@ -1,0 +1,28 @@
+<%- include('partials/head', { pageTitle }) %>
+<%- include('partials/navigation') %>
+<main class="page-shell content-page">
+  <header class="page-intro page-intro-compact">
+    <p class="eyebrow">Knowledge base</p>
+    <h1>Frequently asked questions.</h1>
+    <p class="lead">Browse the currently published answers. Automated question matching will be connected in a later phase.</p>
+  </header>
+  <% const categoryNames = Object.keys(categories); %>
+  <% if (!categoryNames.length) { %>
+    <section class="empty-state"><p class="eyebrow">No published FAQs</p><h2>The FAQ knowledge base is being prepared.</h2><p>Send a general enquiry if you need help before an answer is published.</p><a class="button button-primary" href="/contact">Contact support</a></section>
+  <% } else { %>
+    <div class="faq-list">
+      <% categoryNames.forEach((category) => { %>
+        <section class="faq-category">
+          <p class="eyebrow"><%= category %></p>
+          <% categories[category].forEach((faq) => { %>
+            <details class="faq-item">
+              <summary><%= faq.question %></summary>
+              <p><%= faq.answer %></p>
+            </details>
+          <% }); %>
+        </section>
+      <% }); %>
+    </div>
+  <% } %>
+</main>
+<%- include('partials/footer') %>

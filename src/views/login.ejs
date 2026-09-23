@@ -1,0 +1,18 @@
+<%- include('partials/head', { pageTitle: 'Login' }) %>
+<%- include('partials/navigation') %>
+<main class="page-shell auth-panel">
+    <p class="eyebrow">Student support access</p>
+    <h1>Log in</h1>
+    <p class="intro">Access your customer service account.</p>
+    <% if (registered) { %><p class="form-success" role="status">Account created. You can now log in.</p><% } %>
+    <% if (error) { %><p class="form-errors" role="alert"><%= error %></p><% } %>
+    <form method="post" action="/login" class="auth-form">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" autocomplete="email" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button type="submit">Log in</button>
+    </form>
+    <p><a href="/register">Create a student account</a></p>
+</main>
+<%- include('partials/footer') %>

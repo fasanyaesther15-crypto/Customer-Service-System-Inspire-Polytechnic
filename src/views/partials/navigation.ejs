@@ -1,0 +1,26 @@
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">IP</span>
+      <span>Inspire Polytechnic<small>Customer service system</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
+    <nav id="site-navigation" class="site-navigation" aria-label="Primary navigation">
+      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
+      <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
+      <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
+      <a class="<%= currentPath === '/admissions' ? 'active' : '' %>" href="/admissions">Admissions</a>
+      <a class="<%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
+      <a class="<%= currentPath === '/announcements' ? 'active' : '' %>" href="/announcements">Announcements</a>
+      <a class="<%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
+      <span class="nav-divider" aria-hidden="true"></span>
+      <% if (currentUser) { %>
+        <span class="signed-in">Signed in as <%= currentUser.fullName %></span>
+        <form method="post" action="/logout" class="nav-form"><button type="submit" class="nav-action">Log out</button></form>
+      <% } else { %>
+        <a href="/login">Log in</a>
+        <a class="nav-cta" href="/register">Register</a>
+      <% } %>
+    </nav>
+  </div>
+</header>

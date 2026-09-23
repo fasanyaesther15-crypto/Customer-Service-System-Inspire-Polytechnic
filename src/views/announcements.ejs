@@ -1,0 +1,23 @@
+<%- include('partials/head', { pageTitle }) %>
+<%- include('partials/navigation') %>
+<main class="page-shell content-page">
+  <header class="page-intro page-intro-compact">
+    <p class="eyebrow">Public notices</p>
+    <h1>Announcements.</h1>
+    <p class="lead">Published updates will appear here when they are available.</p>
+  </header>
+  <% if (!announcements.length) { %>
+    <section class="empty-state"><p class="eyebrow">No announcements</p><h2>There are no published announcements yet.</h2><p>Check back here for future institutional updates.</p></section>
+  <% } else { %>
+    <div class="announcement-list">
+      <% announcements.forEach((announcement) => { %>
+        <article class="announcement-item">
+          <p class="announcement-date"><%= announcement.published_at ? new Date(announcement.published_at).toLocaleDateString() : 'Published update' %></p>
+          <h2><%= announcement.title %></h2>
+          <p><%= announcement.body %></p>
+        </article>
+      <% }); %>
+    </div>
+  <% } %>
+</main>
+<%- include('partials/footer') %>

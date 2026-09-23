@@ -1,0 +1,25 @@
+<%- include('partials/head', { pageTitle }) %>
+<%- include('partials/navigation') %>
+<main class="page-shell content-page">
+  <header class="page-intro page-intro-compact">
+    <p class="eyebrow">General enquiry</p>
+    <h1>How can we help?</h1>
+    <p class="lead">Send a question to the customer service team. This form creates a general enquiry, not a support ticket.</p>
+  </header>
+  <% if (success) { %><p class="form-success" role="status">Your enquiry was received. Thank you for getting in touch.</p><% } %>
+  <% if (errors.length) { %>
+    <div class="form-errors" role="alert"><% errors.forEach((error) => { %><p><%= error %></p><% }); %></div>
+  <% } %>
+  <form method="post" action="/contact" class="contact-form">
+    <div class="form-grid">
+      <div><label for="name">Name</label><input id="name" name="name" type="text" value="<%= values.name || '' %>" autocomplete="name" required></div>
+      <div><label for="email">Email address</label><input id="email" name="email" type="email" value="<%= values.email || '' %>" autocomplete="email" required></div>
+    </div>
+    <label for="subject">Subject</label>
+    <input id="subject" name="subject" type="text" value="<%= values.subject || '' %>" required>
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="7" required><%= values.message || '' %></textarea>
+    <button class="button button-primary" type="submit">Send enquiry</button>
+  </form>
+</main>
+<%- include('partials/footer') %>

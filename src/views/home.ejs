@@ -1,0 +1,37 @@
+<%- include('partials/head', { pageTitle }) %>
+<%- include('partials/navigation') %>
+<main>
+  <section class="hero-band">
+    <div class="page-shell hero-grid">
+      <div>
+        <p class="eyebrow">Inspire Polytechnic</p>
+        <h1>Support that keeps student questions moving.</h1>
+        <p class="hero-copy">Find information about programmes and admissions, browse common questions, or send an enquiry to the customer service team.</p>
+        <div class="button-row">
+          <a class="button button-primary" href="/programmes">Explore programmes</a>
+          <a class="button button-quiet" href="/contact">Contact support</a>
+        </div>
+      </div>
+      <div class="hero-note" aria-label="Customer service pathways">
+        <p class="eyebrow">Start here</p>
+        <ul class="pathway-list">
+          <li><a href="/admissions"><span>01</span>Admissions information</a></li>
+          <li><a href="/faq"><span>02</span>Frequently asked questions</a></li>
+          <li><a href="/contact"><span>03</span>General enquiry</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="page-shell section-block">
+    <div class="section-heading">
+      <p class="eyebrow">A clear first step</p>
+      <h2>Useful information, without the runaround.</h2>
+    </div>
+    <div class="feature-grid">
+      <a class="feature-card" href="/programmes"><span class="card-number">01</span><h3>Programmes</h3><p>Review the programme information area and find the right next question to ask.</p></a>
+      <a class="feature-card" href="/admissions"><span class="card-number">02</span><h3>Admissions</h3><p>Follow the admissions information pathway and contact support when you need clarification.</p></a>
+      <a class="feature-card" href="/faq"><span class="card-number">03</span><h3>FAQ</h3><p>Browse the current knowledge base for answers to common student questions.</p></a>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
