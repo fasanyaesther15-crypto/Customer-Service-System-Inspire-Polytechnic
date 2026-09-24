@@ -1,63 +1,169 @@
-<%- include('partials/head', { pageTitle }) %>
-<%- include('partials/navigation') %>
-<main>
-  <section class="hero-band">
-    <div class="page-shell hero-grid">
-      <div class="hero-copy-wrap">
-        <p class="eyebrow">Inspire Polytechnic</p>
-        <h1>Support that keeps student questions moving.</h1>
-        <p class="hero-copy">Find information about programmes and admissions, browse common questions, or get help from the support team when you need a faster answer.</p>
-        <div class="button-row">
-          <a class="button button-primary" href="/programmes">Explore programmes</a>
-          <a class="button button-secondary" href="/contact">Contact support</a>
-        </div>
+<%- include('partials/head', { pageTitle: 'Home' }) %>
+
+<div class="accent-bar"></div>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">IP</div>
+    <div class="brand-name">Inspire Polytechnic</div>
+  </div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/programmes">Programmes</a>
+    <a href="/admissions">Admissions</a>
+    <a href="/faq">FAQ</a>
+    <a href="/login">Login</a>
+    <a href="/register" class="btn-register">Register</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">Welcome to Inspire Polytechnic</div>
+    <p class="sr-only">Support that keeps student questions moving.</p>
+    <h1>Learning, support and student services in one place.</h1>
+    <p>Explore institutional information, get instant answers to common questions, or connect with the customer support team.</p>
+    <div class="hero-actions">
+      <a href="/programmes" class="btn btn-primary">Explore Programmes</a>
+      <a href="/contact" class="btn btn-secondary">Get Support</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <a href="/faq" class="info-item">
+      <div class="big">24/7</div>
+      <div class="small">FAQ assistance</div>
+    </a>
+    <a href="/student/chat" class="info-item">
+      <div class="big">Live</div>
+      <div class="small">support chat</div>
+    </a>
+    <a href="/student/tickets" class="info-item">
+      <div class="big">Track</div>
+      <div class="small">support tickets</div>
+    </a>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="section-inner about-grid">
+    <div class="about-copy">
+      <div class="eyebrow">About us</div>
+      <h2>Built around every student's journey</h2>
+      <p>Inspire Polytechnic brings admissions, academics and support together in one place, so students spend less time chasing answers and more time learning.</p>
+      <p>Our customer service team and self-serve tools work side by side, giving you a fast answer whether you prefer to search, chat, or speak with someone directly.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="num">12,400+</div><div class="label">Students supported</div></div>
+      <div class="stat-card"><div class="num">18</div><div class="label">Programmes offered</div></div>
+      <div class="stat-card"><div class="num">9</div><div class="label">Years of service</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="programmes" id="programmes">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="eyebrow">Programmes</div>
+      <h2>Find the right path for you</h2>
+      <p>Explore our most requested programmes across technology, business and the sciences.</p>
+    </div>
+    <div class="programme-grid">
+      <div class="programme-card">
+        <div class="programme-icon"></div>
+        <h3>Computer Science</h3>
+        <p>Software development, systems and networking foundations for the tech industry.</p>
+        <a href="#">Learn more</a>
       </div>
-      <div class="hero-note" aria-label="Customer service pathways">
-        <div class="panel-header">
-          <p class="eyebrow">Student support</p>
-        </div>
-        <ul class="pathway-list">
-          <li>
-            <a href="/faq">
-              <span class="feature-pill">24/7</span>
-              <div>
-                <strong>FAQ assistance</strong>
-                <small>Search the student knowledge base</small>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/student/chat">
-              <span class="feature-pill">Live</span>
-              <div>
-                <strong>Support chat</strong>
-                <small>Speak with an authorized support agent</small>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/student/tickets">
-              <span class="feature-pill">Track</span>
-              <div>
-                <strong>Support tickets</strong>
-                <small>Review progress and follow up quickly</small>
-              </div>
-            </a>
-          </li>
-        </ul>
+      <div class="programme-card">
+        <div class="programme-icon"></div>
+        <h3>Business Administration</h3>
+        <p>Management, finance and entrepreneurship skills for future business leaders.</p>
+        <a href="#">Learn more</a>
+      </div>
+      <div class="programme-card">
+        <div class="programme-icon"></div>
+        <h3>Engineering Technology</h3>
+        <p>Hands-on training across mechanical, electrical and civil disciplines.</p>
+        <a href="#">Learn more</a>
+      </div>
+      <div class="programme-card">
+        <div class="programme-icon"></div>
+        <h3>Mass Communication</h3>
+        <p>Media production, journalism and public relations for the modern communicator.</p>
+        <a href="#">Learn more</a>
       </div>
     </div>
-  </section>
-  <section class="page-shell section-block">
-    <div class="section-heading">
-      <p class="eyebrow">A clear first step</p>
-      <h2>Useful information, without the runaround.</h2>
+  </div>
+</section>
+
+<section id="admissions">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <div>
+        <h2>Ready to begin your admission?</h2>
+        <p>Start your application today or chat with our support team if you have questions along the way.</p>
+      </div>
+      <a href="/admissions" class="btn btn-secondary">Start Application</a>
     </div>
-    <div class="feature-grid">
-      <a class="feature-card" href="/programmes"><span class="card-number">01</span><h3>Programmes</h3><p>Review the programme information area and find the right next question to ask.</p></a>
-      <a class="feature-card" href="/admissions"><span class="card-number">02</span><h3>Admissions</h3><p>Follow the admissions information pathway and contact support when you need clarification.</p></a>
-      <a class="feature-card" href="/faq"><span class="card-number">03</span><h3>FAQ</h3><p>Browse the current knowledge base for answers to common student questions.</p></a>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="eyebrow">FAQ</div>
+      <h2>Common questions</h2>
+      <p>Can't find what you're looking for? Our support team is available around the clock.</p>
     </div>
-  </section>
-</main>
-<%- include('partials/footer') %>
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>How do I apply for admission?</summary>
+        <p>Click "Start Application" above, create an account, and follow the guided steps to submit your documents online.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What programmes are currently open for enrollment?</summary>
+        <p>All programmes listed above are open for the current academic session. Visit the Programmes page for full details and requirements.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How can I reach customer support?</summary>
+        <p>Use the Live Chat button on any page, raise a support ticket, or reach us through the contact details in the footer.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I track the status of my support ticket?</summary>
+        <p>Yes. Once logged in, your ticket history and live status are available from your student dashboard.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand">
+        <div class="brand-mark">IP</div>
+        <div class="brand-name">Inspire Polytechnic</div>
+      </div>
+      <p>Learning, support and student services, brought together in one place.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Institution</h4>
+      <a href="/about">About</a>
+      <a href="/programmes">Programmes</a>
+      <a href="/admissions">Admissions</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/faq">FAQ</a>
+      <a href="/student/chat">Live Chat</a>
+      <a href="/student/tickets">Track Ticket</a>
+    </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 Inspire Polytechnic. All rights reserved.</div>
+</footer>

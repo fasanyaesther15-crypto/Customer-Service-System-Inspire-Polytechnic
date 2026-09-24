@@ -1,12 +1,13 @@
 <%- include('partials/head', { pageTitle }) %>
 <%- include('partials/navigation') %>
-<main class="page-shell content-page">
+<main class="page-shell public-page">
   <header class="page-intro page-intro-compact">
     <p class="eyebrow">Knowledge base</p>
     <h1>Frequently asked questions.</h1>
     <p class="lead">Browse published answers or ask a question. Matches are based on the words in the current FAQ knowledge base.</p>
   </header>
-  <section class="faq-search">
+
+  <section class="faq-search public-panel">
     <p class="eyebrow">Find an answer</p>
     <form method="post" action="/faq" class="faq-search-form">
       <label for="question">Your question</label>
@@ -19,9 +20,10 @@
       <div class="faq-result faq-result-fallback" role="status"><p class="eyebrow">No matching FAQ</p><h2>We could not find a matching answer.</h2><p><%= faqResult.message %></p><a class="button button-primary" href="/contact">Contact support</a></div>
     <% } %>
   </section>
+
   <% const categoryNames = Object.keys(categories); %>
   <% if (!categoryNames.length) { %>
-    <section class="empty-state"><p class="eyebrow">No published FAQs</p><h2>The FAQ knowledge base is being prepared.</h2><p>Send a general enquiry if you need help before an answer is published.</p><a class="button button-primary" href="/contact">Contact support</a></section>
+    <section class="empty-state public-panel"><p class="eyebrow">No published FAQs</p><h2>The FAQ knowledge base is being prepared.</h2><p>Send a general enquiry if you need help before an answer is published.</p><a class="button button-primary" href="/contact">Contact support</a></section>
   <% } else { %>
     <div class="faq-list">
       <% categoryNames.forEach((category) => { %>

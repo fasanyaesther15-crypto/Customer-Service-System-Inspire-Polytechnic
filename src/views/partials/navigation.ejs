@@ -1,34 +1,28 @@
 <header class="site-header">
-  <div class="site-header-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark">IP</span>
-      <span>Inspire Polytechnic<small>Customer service system</small></span>
-    </a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
-    <nav id="site-navigation" class="site-navigation" aria-label="Primary navigation">
-      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
-      <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
-      <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
-      <a class="<%= currentPath === '/admissions' ? 'active' : '' %>" href="/admissions">Admissions</a>
-      <a class="<%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
-      <a class="<%= currentPath === '/announcements' ? 'active' : '' %>" href="/announcements">Announcements</a>
-      <a class="<%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
-      <span class="nav-divider" aria-hidden="true"></span>
-      <% if (currentUser) { %>
-        <% if (currentUser.role === 'student') { %>
-          <a href="/student/dashboard">Student portal</a>
-          <a href="/student/tickets">Tickets</a>
-          <a href="/student/chat">Live chat</a>
-        <% } else if (currentUser.role === 'support_agent' || currentUser.role === 'administrator') { %>
-          <a href="/support/dashboard">Support dashboard</a>
-          <% if (currentUser.role === 'administrator') { %><a href="/admin/dashboard">Administration</a><% } %>
-        <% } %>
-        <span class="signed-in">Signed in as <%= currentUser.fullName %></span>
-        <form method="post" action="/logout" class="nav-form"><button type="submit" class="nav-action">Log out</button></form>
-      <% } else { %>
-        <a href="/login">Log in</a>
-        <a class="nav-cta" href="/register">Register</a>
-      <% } %>
-    </nav>
+  <div class="brand" aria-label="Inspire Polytechnic home">
+    <a href="/" class="brand-mark">IP</a>
+    <div class="brand-name">Inspire Polytechnic</div>
   </div>
+
+  <nav class="site-navigation" aria-label="Primary navigation">
+    <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
+    <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
+    <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
+    <a class="<%= currentPath === '/admissions' ? 'active' : '' %>" href="/admissions">Admissions</a>
+    <a class="<%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
+
+    <% if (currentUser) { %>
+      <% if (currentUser.role === 'student') { %>
+        <a href="/student/dashboard">Student portal</a>
+        <a href="/student/tickets">Tickets</a>
+      <% } else if (currentUser.role === 'support_agent' || currentUser.role === 'administrator') { %>
+        <a href="/support/dashboard">Support dashboard</a>
+      <% } %>
+      <a href="/logout" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
+      <form method="post" action="/logout" style="display:none;"></form>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register" class="btn-register">Register</a>
+    <% } %>
+  </nav>
 </header>
