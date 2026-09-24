@@ -70,7 +70,7 @@ This document converts the approved project requirements into implementation-neu
 - Database writes shall be consistent and use parameterized queries.
 - Passwords and session secrets shall never be exposed to clients or committed to source control.
 - The system shall be maintainable by a student project team using the documented stack.
-- The system shall be deployable on Vercel with Supabase PostgreSQL.
+- The system shall be deployable on Render Free Web Service with Supabase PostgreSQL.
 
 ## Acceptance Boundaries
 

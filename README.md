@@ -34,7 +34,7 @@ The system addresses these problems by combining public information, a rule-base
 - Support tickets with categories, priorities, statuses, assignment, conversation history, and activity logs.
 - Socket.IO chat rooms with persistent sessions and messages.
 - Support-agent and administrator dashboards and management actions.
-- PostgreSQL persistence through Supabase and deployment planning for Vercel.
+- PostgreSQL persistence through Supabase and deployment planning for Render Free Web Service.
 
 ### Out of scope
 
@@ -109,7 +109,7 @@ The system addresses these problems by combining public information, a rule-base
 - **Reliability:** ticket, chat, and activity data shall be stored persistently in PostgreSQL.
 - **Maintainability:** the application shall use a straightforward Express MVC-style organization with server-rendered EJS views.
 - **Scalability:** the design shall support a modest institutional workload without introducing distributed infrastructure.
-- **Availability:** deployment shall target Vercel with Supabase providing the hosted database.
+- **Availability:** deployment shall target Render Free Web Service with Supabase providing the hosted database.
 
 ## 8. Core System Modules
 
@@ -134,7 +134,7 @@ The system addresses these problems by combining public information, a rule-base
 | Authentication | express-session, connect-pg-simple, and bcryptjs |
 | Real-time communication | Socket.IO |
 | Security | Helmet and express-rate-limit, with validation and authorization |
-| Deployment | Vercel |
+| Deployment | Render Free Web Service |
 
 No AI service, model, vector database, or external chatbot is part of this system.
 
@@ -242,7 +242,7 @@ The process is rule-based and explainable. It does not infer intent with AI or c
 7. Build FAQ matching and escalation.
 8. Build Socket.IO chat with authorization and persistence.
 9. Build support-agent and administrator workflows.
-10. Apply security controls, test, document, and deploy to Vercel.
+10. Apply security controls, test, document, and deploy to Render Free Web Service.
 
 ## 21. Testing Strategy
 
@@ -252,18 +252,18 @@ The detailed test matrix and acceptance criteria are in [docs/testing.md](docs/t
 
 ## 22. Environment Variables
 
-The implementation shall use environment variables for:
+The implementation requires the following environment variables at runtime:
 
 ```text
 NODE_ENV=development
 PORT=3000
 DATABASE_URL=postgresql://...
 SESSION_SECRET=replace-with-a-long-random-value
-APP_URL=http://localhost:3000
-FAQ_CONFIDENCE_THRESHOLD=0.5
 ```
 
 Values are examples only. Secrets shall not be committed. Supabase connection settings shall use the connection method recommended for the deployment environment.
+
+`APP_URL` and `FAQ_CONFIDENCE_THRESHOLD` are not required by the current runtime and are therefore not included in the committed `.env.example` template.
 
 ## 23. Local Development Setup
 
@@ -282,9 +282,9 @@ Phase 5 includes the authenticated student portal and student-owned support tick
 
 Create a Supabase project, copy its PostgreSQL connection information, and store it in `DATABASE_URL`. Apply the schema described in [docs/database.md](docs/database.md). Enable database backups and use least-privilege credentials appropriate to the deployment. Supabase is used for PostgreSQL hosting and persistence; the application remains responsible for authentication, authorization, and business rules.
 
-## 25. Vercel Deployment Plan
+## 25. Render Deployment Plan
 
-The Express application will be deployed as a Vercel serverless web application using the repository's Vercel configuration. Production environment variables will be added in the Vercel project settings, including `DATABASE_URL`, `SESSION_SECRET`, `APP_URL`, and the FAQ threshold. The deployment will use Supabase for persistent data and will verify session cookies, database connectivity, protected routes, and Socket.IO behavior in the selected Vercel deployment arrangement before release.
+The Express application is deployed as a Render Node web service to preserve the required Socket.IO connection model. Production environment variables are configured in Render's environment settings, including `NODE_ENV`, `PORT`, `DATABASE_URL`, and `SESSION_SECRET`. The deployment uses Supabase for persistent data and verifies session cookies, database connectivity, protected routes, and Socket.IO behavior before release.
 
 ## 26. Git Workflow
 

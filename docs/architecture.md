@@ -38,7 +38,7 @@ The session cookie identifies the authenticated user; the server remains the aut
 
 ## Deployment Shape
 
-Vercel is the intended deployment platform. Supabase provides the hosted PostgreSQL database. The design avoids local-only persistence and avoids Redis, containers, Kubernetes, microservices, and other infrastructure not needed by this project. Socket.IO deployment compatibility must be verified during implementation because serverless hosting can impose connection-lifetime constraints.
+Render is the intended deployment platform. Supabase provides the hosted PostgreSQL database. The design avoids local-only persistence and avoids Redis, containers, Kubernetes, microservices, and other infrastructure not needed by this project. This architecture keeps the Node.js, Express, Socket.IO, and PostgreSQL stack intact while supporting persistent WebSocket connections required by live chat.
 
 ## Simplicity Rules
 

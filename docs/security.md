@@ -57,7 +57,7 @@ Phase 7 authenticates Socket.IO connections from the existing session and author
 
 ## Operational Checks
 
-Before deployment, verify secure cookies over HTTPS, production error handling, rate-limit behavior, authorization boundaries, database connection settings, and Vercel environment variables. Review dependencies for known security issues as part of the release process.
+Before deployment, verify secure cookies over HTTPS, production error handling, rate-limit behavior, authorization boundaries, database connection settings, and Render environment variables. Review dependencies for known security issues as part of the release process.
 
 ## Explicit Exclusions
 

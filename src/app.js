@@ -31,6 +31,7 @@ if (!process.env.SESSION_SECRET) {
 
 app.set('view engine', 'ejs');
 app.set('views', viewsDirectory);
+app.set('trust proxy', 1);
 
 app.use(helmet());
 app.use(express.json());
@@ -105,8 +106,16 @@ app.use((error, request, response, next) => {
 });
 
 if (require.main === module) {
-  server.listen(port, () => {
+  server.listen(port, '0.0.0.0', () => {
     console.log(`Customer service system listening on port ${port}`);
+  });
+
+  process.on('SIGTERM', () => {
+    server.close(() => process.exit(0));
+  });
+
+  process.on('SIGINT', () => {
+    server.close(() => process.exit(0));
   });
 }
 

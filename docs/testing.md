@@ -82,4 +82,4 @@ Use synthetic students, agents, administrators, FAQs, tickets, chats, and announ
 
 ## Completion Criteria
 
-A release candidate must pass the focused unit and integration tests, the critical end-to-end workflows, authorization checks, and a production configuration review. Any known limitation, especially hosting constraints affecting Socket.IO on Vercel, must be documented before deployment.
+A release candidate must pass the focused unit and integration tests, the critical end-to-end workflows, authorization checks, and a production configuration review. Any known limitation, especially free-tier sleep and cold-start latency affecting Socket.IO on Render, must be documented before deployment.
