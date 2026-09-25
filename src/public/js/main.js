@@ -6,11 +6,13 @@ const navigation = document.querySelector('.site-navigation');
 if (menuToggle && navigation) {
   const closeMenu = () => {
     menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.setAttribute('aria-label', 'Open navigation');
     navigation.classList.remove('is-open');
   };
 
   const openMenu = () => {
     menuToggle.setAttribute('aria-expanded', 'true');
+    menuToggle.setAttribute('aria-label', 'Close navigation');
     navigation.classList.add('is-open');
   };
 

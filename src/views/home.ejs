@@ -1,27 +1,7 @@
 <%- include('partials/head', { pageTitle: 'Home' }) %>
 
 <div class="accent-bar"></div>
-
-<header class="site-header home-header">
-  <div class="brand" aria-label="Inspire Polytechnic home">
-    <a href="/" class="brand-mark">IP</a>
-    <div class="brand-name">Inspire Polytechnic</div>
-  </div>
-
-  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation">
-    Menu
-  </button>
-
-  <nav id="site-navigation" class="site-navigation home-nav" aria-label="Primary navigation">
-    <a class="active" href="/">Home</a>
-    <a href="/about">About</a>
-    <a href="/programmes">Programmes</a>
-    <a href="/admissions">Admissions</a>
-    <a href="/faq">FAQ</a>
-    <a href="/login" class="nav-login">Login</a>
-    <a href="/register" class="btn-register">Register</a>
-  </nav>
-</header>
+<%- include('partials/navigation') %>
 
 <section class="hero">
   <div class="section-inner hero-inner">
@@ -190,3 +170,4 @@
   </div>
   <div class="footer-bottom">&copy; 2026 Inspire Polytechnic. All rights reserved.</div>
 </footer>
+<script src="/js/main.js"></script>
