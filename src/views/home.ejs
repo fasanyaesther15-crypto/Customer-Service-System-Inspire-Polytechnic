@@ -2,47 +2,54 @@
 
 <div class="accent-bar"></div>
 
-<header>
-  <div class="brand">
-    <div class="brand-mark">IP</div>
+<header class="site-header home-header">
+  <div class="brand" aria-label="Inspire Polytechnic home">
+    <a href="/" class="brand-mark">IP</a>
     <div class="brand-name">Inspire Polytechnic</div>
   </div>
-  <nav>
-    <a href="/">Home</a>
+
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation">
+    Menu
+  </button>
+
+  <nav id="site-navigation" class="site-navigation home-nav" aria-label="Primary navigation">
+    <a class="active" href="/">Home</a>
     <a href="/about">About</a>
     <a href="/programmes">Programmes</a>
     <a href="/admissions">Admissions</a>
     <a href="/faq">FAQ</a>
-    <a href="/login">Login</a>
+    <a href="/login" class="nav-login">Login</a>
     <a href="/register" class="btn-register">Register</a>
   </nav>
 </header>
 
 <section class="hero">
-  <div class="hero-copy">
-    <div class="eyebrow">Welcome to Inspire Polytechnic</div>
-    <p class="sr-only">Support that keeps student questions moving.</p>
-    <h1>Learning, support and student services in one place.</h1>
-    <p>Explore institutional information, get instant answers to common questions, or connect with the customer support team.</p>
-    <div class="hero-actions">
-      <a href="/programmes" class="btn btn-primary">Explore Programmes</a>
-      <a href="/contact" class="btn btn-secondary">Get Support</a>
+  <div class="section-inner hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">Welcome to Inspire Polytechnic</div>
+      <p class="sr-only">Support that keeps student questions moving.</p>
+      <h1>Learning, support and student services in one place.</h1>
+      <p>Explore institutional information, get instant answers to common questions, or connect with the customer support team.</p>
+      <div class="hero-actions">
+        <a href="/programmes" class="btn btn-primary">Explore Programmes</a>
+        <a href="/contact" class="btn btn-secondary">Get Support</a>
+      </div>
     </div>
-  </div>
 
-  <div class="info-card">
-    <a href="/faq" class="info-item">
-      <div class="big">24/7</div>
-      <div class="small">FAQ assistance</div>
-    </a>
-    <a href="/student/chat" class="info-item">
-      <div class="big">Live</div>
-      <div class="small">support chat</div>
-    </a>
-    <a href="/student/tickets" class="info-item">
-      <div class="big">Track</div>
-      <div class="small">support tickets</div>
-    </a>
+    <div class="info-card">
+      <a href="/faq" class="info-item">
+        <div class="big">24/7</div>
+        <div class="small">FAQ assistance</div>
+      </a>
+      <a href="/student/chat" class="info-item">
+        <div class="big">Live</div>
+        <div class="small">support chat</div>
+      </a>
+      <a href="/student/tickets" class="info-item">
+        <div class="big">Track</div>
+        <div class="small">support tickets</div>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -71,25 +78,41 @@
     </div>
     <div class="programme-grid">
       <div class="programme-card">
-        <div class="programme-icon"></div>
+        <div class="programme-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-label="Computer Science icon">
+            <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7A2.5 2.5 0 0 1 17.5 16H13l-2 4h2v1H7v-1h2l-2-4H6.5A2.5 2.5 0 0 1 4 13.5zm2.5-.5h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/>
+          </svg>
+        </div>
         <h3>Computer Science</h3>
         <p>Software development, systems and networking foundations for the tech industry.</p>
         <a href="#">Learn more</a>
       </div>
       <div class="programme-card">
-        <div class="programme-icon"></div>
+        <div class="programme-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-label="Business Administration icon">
+            <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5zm4 1.7v4.8L12 17l5-2v-4.8L12 14l-5-3.8zm-1.5 5.8h13v1.5h-13z"/>
+          </svg>
+        </div>
         <h3>Business Administration</h3>
         <p>Management, finance and entrepreneurship skills for future business leaders.</p>
         <a href="#">Learn more</a>
       </div>
       <div class="programme-card">
-        <div class="programme-icon"></div>
+        <div class="programme-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-label="Engineering Technology icon">
+            <path d="M12 2v4.5M9.5 5.5l5 13M4.5 11.5l4.5-1.5 1.5 4.5-4.5 1.5-1.5-4.5zm14.5 0l-4.5-1.5-1.5 4.5 4.5 1.5 1.5-4.5zM12 16v6"/>
+          </svg>
+        </div>
         <h3>Engineering Technology</h3>
         <p>Hands-on training across mechanical, electrical and civil disciplines.</p>
         <a href="#">Learn more</a>
       </div>
       <div class="programme-card">
-        <div class="programme-icon"></div>
+        <div class="programme-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-label="Mass Communication icon">
+            <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h11A2.5 2.5 0 0 1 19 7.5v6A2.5 2.5 0 0 1 16.5 16H9l-5 4v-4.5A2.5 2.5 0 0 1 3 13.5zm3.5-1.5h8v2h-8zm0 4h6v2h-6zm-2 5h11v1.5H4.5z"/>
+          </svg>
+        </div>
         <h3>Mass Communication</h3>
         <p>Media production, journalism and public relations for the modern communicator.</p>
         <a href="#">Learn more</a>

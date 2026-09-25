@@ -48,6 +48,16 @@ test('all public website pages render successfully', async () => {
   }
 });
 
+test('home page uses full-width sections with inner content containers and visible register CTA', async () => {
+  const response = await fetch(`${baseUrl}/`);
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(body, /<section class="hero">/);
+  assert.match(body, /<div class="section-inner hero-inner">/);
+  assert.match(body, /<a href="\/register" class="btn-register">Register<\/a>/);
+});
+
 test('contact validation rejects incomplete enquiries', async () => {
   const response = await fetch(`${baseUrl}/contact`, {
     method: 'POST',

@@ -4,7 +4,11 @@
     <div class="brand-name">Inspire Polytechnic</div>
   </div>
 
-  <nav class="site-navigation" aria-label="Primary navigation">
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation">
+    Menu
+  </button>
+
+  <nav id="site-navigation" class="site-navigation" aria-label="Primary navigation">
     <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
     <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
     <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
@@ -21,7 +25,7 @@
       <a href="/logout" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
       <form method="post" action="/logout" style="display:none;"></form>
     <% } else { %>
-      <a href="/login">Login</a>
+      <a href="/login" class="nav-login">Login</a>
       <a href="/register" class="btn-register">Register</a>
     <% } %>
   </nav>

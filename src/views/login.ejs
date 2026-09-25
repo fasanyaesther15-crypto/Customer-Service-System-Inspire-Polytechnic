@@ -7,12 +7,21 @@
     <% if (registered) { %><p class="form-success" role="status">Account created. You can now log in.</p><% } %>
     <% if (error) { %><p class="form-errors" role="alert"><%= error %></p><% } %>
     <form method="post" action="/login" class="auth-form">
-      <label for="email">Email address</label>
-      <input id="email" name="email" type="email" autocomplete="email" required>
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" required>
-      <button type="submit">Log in</button>
+      <div class="field-group">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field-group">
+        <label for="password">Password</label>
+        <div class="password-field">
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button type="button" class="password-toggle" data-password-toggle="password" aria-label="Show password" aria-pressed="false">
+            <span aria-hidden="true">Show</span>
+          </button>
+        </div>
+      </div>
+      <button class="button button-primary" type="submit">Log in</button>
     </form>
-    <p><a href="/register">Create a student account</a></p>
+    <p class="auth-meta"><a href="/register">Create a student account</a></p>
 </main>
 <%- include('partials/footer') %>

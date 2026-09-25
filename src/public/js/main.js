@@ -11,6 +11,21 @@ if (menuToggle && navigation) {
 	});
 }
 
+const passwordToggles = document.querySelectorAll('[data-password-toggle]');
+passwordToggles.forEach((toggle) => {
+	const targetId = toggle.dataset.passwordToggle;
+	const targetInput = targetId ? document.getElementById(targetId) : null;
+	if (!targetInput) return;
+
+	toggle.addEventListener('click', () => {
+		const isHidden = targetInput.type === 'password';
+		targetInput.type = isHidden ? 'text' : 'password';
+		toggle.setAttribute('aria-pressed', String(isHidden));
+		toggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+		toggle.querySelector('span').textContent = isHidden ? 'Hide' : 'Show';
+	});
+});
+
 const chatPanel = document.querySelector('[data-chat-session]');
 if (chatPanel && typeof io === 'function') {
 	const socket = io();
