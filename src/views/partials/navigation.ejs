@@ -5,28 +5,41 @@
   </div>
 
   <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation">
-    Menu
+    <span class="menu-toggle-label">Menu</span>
   </button>
 
   <nav id="site-navigation" class="site-navigation" aria-label="Primary navigation">
-    <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
-    <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
-    <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
-    <a class="<%= currentPath === '/admissions' ? 'active' : '' %>" href="/admissions">Admissions</a>
-    <a class="<%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
-
-    <% if (currentUser) { %>
-      <% if (currentUser.role === 'student') { %>
-        <a href="/student/dashboard">Student portal</a>
-        <a href="/student/tickets">Tickets</a>
-      <% } else if (currentUser.role === 'support_agent' || currentUser.role === 'administrator') { %>
-        <a href="/support/dashboard">Support dashboard</a>
-      <% } %>
-      <a href="/logout" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
-      <form method="post" action="/logout" style="display:none;"></form>
-    <% } else { %>
+    <% if (!currentUser) { %>
+      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
+      <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
+      <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
+      <a class="<%= currentPath === '/admissions' ? 'active' : '' %>" href="/admissions">Admissions</a>
+      <a class="<%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
+      <a class="<%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
       <a href="/login" class="nav-login">Login</a>
       <a href="/register" class="btn-register">Register</a>
+    <% } else if (currentUser.role === 'student') { %>
+      <a class="<%= currentPath === '/student/dashboard' ? 'active' : '' %>" href="/student/dashboard">Dashboard</a>
+      <a class="<%= currentPath === '/student/tickets' ? 'active' : '' %>" href="/student/tickets">Tickets</a>
+      <a class="<%= currentPath === '/student/chat' ? 'active' : '' %>" href="/student/chat">Chat</a>
+      <a href="/logout" class="nav-login" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
+      <form method="post" action="/logout" style="display:none;"></form>
+    <% } else if (currentUser.role === 'support_agent') { %>
+      <a class="<%= currentPath === '/support/dashboard' ? 'active' : '' %>" href="/support/dashboard">Dashboard</a>
+      <a class="<%= currentPath === '/support/tickets' ? 'active' : '' %>" href="/support/tickets">Tickets</a>
+      <a class="<%= currentPath === '/support/chats' ? 'active' : '' %>" href="/support/chats">Chats</a>
+      <a href="/logout" class="nav-login" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
+      <form method="post" action="/logout" style="display:none;"></form>
+    <% } else if (currentUser.role === 'administrator') { %>
+      <a class="<%= currentPath === '/admin/dashboard' ? 'active' : '' %>" href="/admin/dashboard">Dashboard</a>
+      <a class="<%= currentPath === '/admin/users' ? 'active' : '' %>" href="/admin/users">Users</a>
+      <a class="<%= currentPath === '/admin/faqs' ? 'active' : '' %>" href="/admin/faqs">FAQs</a>
+      <a class="<%= currentPath === '/admin/announcements' ? 'active' : '' %>" href="/admin/announcements">Announcements</a>
+      <a class="<%= currentPath === '/admin/activity-logs' ? 'active' : '' %>" href="/admin/activity-logs">Activity logs</a>
+      <a class="<%= currentPath === '/support/dashboard' ? 'active' : '' %>" href="/support/dashboard">Tickets</a>
+      <a class="<%= currentPath === '/support/chats' ? 'active' : '' %>" href="/support/chats">Chats</a>
+      <a href="/logout" class="nav-login" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
+      <form method="post" action="/logout" style="display:none;"></form>
     <% } %>
   </nav>
 </header>

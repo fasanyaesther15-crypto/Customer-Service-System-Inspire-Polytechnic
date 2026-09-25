@@ -101,6 +101,52 @@ test('invalid login is rejected without revealing account details', async () => 
   assert.match(await response.text(), /Invalid email or password/);
 });
 
+test('role-aware login redirects to the matching portal', async () => {
+  const studentEmail = `phase-role-student-${crypto.randomUUID()}@example.test`;
+  const supportEmail = `phase-role-support-${crypto.randomUUID()}@example.test`;
+  const adminEmail = `phase-role-admin-${crypto.randomUUID()}@example.test`;
+  const password = 'phase role redirect password';
+
+  const createRoleUser = async (email, role) => {
+    const result = await getPool().query(
+      'INSERT INTO users (full_name, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id',
+      [`Role ${role}`, email, await bcrypt.hash(password, 12), role]
+    );
+    return result.rows[0].id;
+  };
+
+  await createRoleUser(studentEmail, 'student');
+  await createRoleUser(supportEmail, 'support_agent');
+  await createRoleUser(adminEmail, 'administrator');
+
+  const studentResponse = await fetch(`${baseUrl}/login`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: formBody({ email: studentEmail, password })
+  });
+  assert.equal(studentResponse.status, 302);
+  assert.equal(studentResponse.headers.get('location'), '/student/dashboard');
+
+  const supportResponse = await fetch(`${baseUrl}/login`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: formBody({ email: supportEmail, password })
+  });
+  assert.equal(supportResponse.status, 302);
+  assert.equal(supportResponse.headers.get('location'), '/support/dashboard');
+
+  const adminResponse = await fetch(`${baseUrl}/login`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: formBody({ email: adminEmail, password })
+  });
+  assert.equal(adminResponse.status, 302);
+  assert.equal(adminResponse.headers.get('location'), '/admin/dashboard');
+});
+
 test('valid login creates a PostgreSQL-backed session and logout removes it', async () => {
   const response = await fetch(`${baseUrl}/login`, {
     method: 'POST',

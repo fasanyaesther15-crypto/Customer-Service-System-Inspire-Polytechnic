@@ -97,7 +97,13 @@ async function login(request, response, next) {
           return next(saveError);
         }
 
-        return response.redirect('/');
+        const redirectMap = {
+          student: '/student/dashboard',
+          support_agent: '/support/dashboard',
+          administrator: '/admin/dashboard'
+        };
+
+        return response.redirect(redirectMap[user.role] || '/');
       });
     });
   } catch (error) {

@@ -4,11 +4,40 @@ const menuToggle = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('.site-navigation');
 
 if (menuToggle && navigation) {
-	menuToggle.addEventListener('click', () => {
-		const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-		menuToggle.setAttribute('aria-expanded', String(!expanded));
-		navigation.classList.toggle('is-open', !expanded);
-	});
+  const closeMenu = () => {
+    menuToggle.setAttribute('aria-expanded', 'false');
+    navigation.classList.remove('is-open');
+  };
+
+  const openMenu = () => {
+    menuToggle.setAttribute('aria-expanded', 'true');
+    navigation.classList.add('is-open');
+  };
+
+  menuToggle.addEventListener('click', () => {
+    const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    if (expanded) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  navigation.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => closeMenu());
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!navigation.contains(event.target) && !menuToggle.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+    }
+  });
 }
 
 const passwordToggles = document.querySelectorAll('[data-password-toggle]');
