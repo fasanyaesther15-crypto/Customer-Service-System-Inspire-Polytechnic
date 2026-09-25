@@ -182,6 +182,12 @@ p, h1, h2, h3, h4 { margin-top: 0; }
   background: var(--color-primary);
 }
 
+.nav-logout-form {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .nav-login {
   display: inline-flex;
   align-items: center;

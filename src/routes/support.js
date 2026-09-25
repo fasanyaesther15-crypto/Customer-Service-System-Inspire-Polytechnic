@@ -11,6 +11,7 @@ router.post('/tickets/:id/status', support, controller.updateTicket);
 router.post('/tickets/:id/messages', support, controller.message);
 router.get('/chats', support, controller.chats);
 router.get('/chats/:id', support, controller.chatDetail);
+router.post('/chats/:id/messages', support, controller.replyChat);
 router.post('/chats/:id/assign', support, controller.assignChat);
 router.post('/chats/:id/close', support, controller.closeChat);
 module.exports = router;

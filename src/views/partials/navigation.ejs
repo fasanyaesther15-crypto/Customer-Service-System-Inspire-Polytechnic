@@ -19,18 +19,23 @@
       <a href="/login" class="nav-login">Login</a>
       <a href="/register" class="btn-register">Register</a>
     <% } else if (currentUser.role === 'student') { %>
+      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
       <a class="<%= currentPath === '/student/dashboard' ? 'active' : '' %>" href="/student/dashboard">Dashboard</a>
       <a class="<%= currentPath === '/student/tickets' ? 'active' : '' %>" href="/student/tickets">Tickets</a>
       <a class="<%= currentPath === '/student/chat' ? 'active' : '' %>" href="/student/chat">Chat</a>
-      <a href="/logout" class="nav-login" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
-      <form method="post" action="/logout" style="display:none;"></form>
+      <form method="post" action="/logout" class="nav-logout-form">
+        <button type="submit" class="nav-login">Log out</button>
+      </form>
     <% } else if (currentUser.role === 'support_agent') { %>
+      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
       <a class="<%= currentPath === '/support/dashboard' ? 'active' : '' %>" href="/support/dashboard">Dashboard</a>
       <a class="<%= currentPath === '/support/tickets' ? 'active' : '' %>" href="/support/tickets">Tickets</a>
       <a class="<%= currentPath === '/support/chats' ? 'active' : '' %>" href="/support/chats">Chats</a>
-      <a href="/logout" class="nav-login" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
-      <form method="post" action="/logout" style="display:none;"></form>
+      <form method="post" action="/logout" class="nav-logout-form">
+        <button type="submit" class="nav-login">Log out</button>
+      </form>
     <% } else if (currentUser.role === 'administrator') { %>
+      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
       <a class="<%= currentPath === '/admin/dashboard' ? 'active' : '' %>" href="/admin/dashboard">Dashboard</a>
       <a class="<%= currentPath === '/admin/users' ? 'active' : '' %>" href="/admin/users">Users</a>
       <a class="<%= currentPath === '/admin/faqs' ? 'active' : '' %>" href="/admin/faqs">FAQs</a>
@@ -38,8 +43,9 @@
       <a class="<%= currentPath === '/admin/activity-logs' ? 'active' : '' %>" href="/admin/activity-logs">Activity logs</a>
       <a class="<%= currentPath === '/support/dashboard' ? 'active' : '' %>" href="/support/dashboard">Tickets</a>
       <a class="<%= currentPath === '/support/chats' ? 'active' : '' %>" href="/support/chats">Chats</a>
-      <a href="/logout" class="nav-login" onclick="event.preventDefault(); this.closest('form')?.submit();">Log out</a>
-      <form method="post" action="/logout" style="display:none;"></form>
+      <form method="post" action="/logout" class="nav-logout-form">
+        <button type="submit" class="nav-login">Log out</button>
+      </form>
     <% } %>
   </nav>
 </header>

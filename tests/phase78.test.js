@@ -139,6 +139,60 @@ test('administrator self-lockout is rejected while another-user management is al
   await getPool().query("UPDATE users SET role = 'student' WHERE id = $1", [ids.student]);
 });
 
+test('student and administrator logout destroys the session and blocks protected routes', async () => {
+  const studentCookie = await login(emails.student);
+  const studentLogout = await fetch(`${baseUrl}/logout`, { method: 'POST', redirect: 'manual', headers: { cookie: studentCookie } });
+  assert.equal(studentLogout.status, 302);
+  assert.equal(studentLogout.headers.get('location'), '/');
+
+  const studentProtected = await fetch(`${baseUrl}/student/dashboard`, { redirect: 'manual', headers: { cookie: studentCookie } });
+  assert.equal(studentProtected.status, 302);
+  assert.equal(studentProtected.headers.get('location'), '/login');
+
+  const adminCookie = await login(emails.admin);
+  const adminLogout = await fetch(`${baseUrl}/logout`, { method: 'POST', redirect: 'manual', headers: { cookie: adminCookie } });
+  assert.equal(adminLogout.status, 302);
+  assert.equal(adminLogout.headers.get('location'), '/');
+
+  const adminProtected = await fetch(`${baseUrl}/admin/dashboard`, { redirect: 'manual', headers: { cookie: adminCookie } });
+  assert.equal(adminProtected.status, 302);
+  assert.equal(adminProtected.headers.get('location'), '/login');
+});
+
+test('dashboard navigation includes a Home link for each authenticated role', async () => {
+  const roles = [
+    { route: '/student/dashboard', cookie: await login(emails.student), expected: 'href="/"' },
+    { route: '/support/dashboard', cookie: await login(emails.agent), expected: 'href="/"' },
+    { route: '/admin/dashboard', cookie: await login(emails.admin), expected: 'href="/"' }
+  ];
+
+  for (const entry of roles) {
+    const response = await fetch(`${baseUrl}${entry.route}`, { headers: { cookie: entry.cookie } });
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /href="\/"/);
+  }
+});
+
+test('support agents can open a chat conversation and reply to a student message', async () => {
+  const agentCookie = await login(emails.agent);
+  const detail = await fetch(`${baseUrl}/support/chats/${ids.chat}`, { headers: { cookie: agentCookie } });
+  assert.equal(detail.status, 200);
+  const reply = await fetch(`${baseUrl}/support/chats/${ids.chat}/messages`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: { cookie: agentCookie, 'content-type': 'application/x-www-form-urlencoded' },
+    body: body({ message: 'Support reply from automated check.' })
+  });
+
+  assert.equal(reply.status, 302);
+  const result = await getPool().query(
+    'SELECT message FROM chat_messages WHERE chat_session_id = $1 AND sender_id = $2 ORDER BY created_at DESC LIMIT 1',
+    [ids.chat, ids.agent]
+  );
+  assert.equal(result.rows[0].message, 'Support reply from automated check.');
+});
+
 test('chat persistence enforces session ownership at the model boundary', async () => {
   const chatModel = require('../src/models/chat');
   const own = await chatModel.findChatSessionForUser(ids.chat, { id: ids.student, role: 'student' });

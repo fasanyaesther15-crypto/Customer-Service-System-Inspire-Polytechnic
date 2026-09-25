@@ -9,6 +9,16 @@
       <article class="message-item"><div class="message-meta"><strong><%= message.sender_name %></strong><span><%= new Date(message.created_at).toLocaleString() %></span></div><p><%= message.message %></p></article>
     <% }); %>
   </div>
-  <% if (session.status !== 'closed') { %><form method="post" action="/support/chats/<%= session.id %>/close"><button class="button button-primary" type="submit">Close chat</button></form><% } %>
+
+  <% if (session.status !== 'closed') { %>
+    <form method="post" action="/support/chats/<%= session.id %>/messages" class="chat-form">
+      <label for="message" class="sr-only">Reply</label>
+      <input id="message" name="message" type="text" maxlength="10000" placeholder="Type a reply" required>
+      <button class="button button-primary" type="submit">Send reply</button>
+    </form>
+    <form method="post" action="/support/chats/<%= session.id %>/close">
+      <button class="button button-quiet" type="submit">Close chat</button>
+    </form>
+  <% } %>
 </main>
 <%- include('../partials/footer') %>
