@@ -58,6 +58,19 @@ test('home page uses full-width sections with inner content containers and visib
   assert.match(body, /<a href="\/register" class="btn-register">Register<\/a>/);
 });
 
+test('home page hero card restores the support access shortcuts', async () => {
+  const response = await fetch(`${baseUrl}/`);
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(body, />24\/7<\/span>/i);
+  assert.match(body, />Live<\/span>/i);
+  assert.match(body, />Track<\/span>/i);
+  assert.match(body, /faq assistance/i);
+  assert.match(body, /support chat/i);
+  assert.match(body, /support tickets/i);
+});
+
 test('contact validation rejects incomplete enquiries', async () => {
   const response = await fetch(`${baseUrl}/contact`, {
     method: 'POST',

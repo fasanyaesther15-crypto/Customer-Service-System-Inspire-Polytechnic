@@ -47,7 +47,7 @@
       <span>Live Chat</span>
     </button>
     <section class="public-chat-panel" id="public-chat-panel" role="dialog" aria-labelledby="public-chat-title" hidden>
-      <header><div><p class="eyebrow">Inspire Polytechnic</p><h2 id="public-chat-title">Inspire Polytechnic Support</h2></div><button type="button" class="public-chat-close" aria-label="Close support options" data-public-chat-close>&times;</button></header>
+      <header><div><p class="eyebrow">Inspire Polytechnic</p><h2 id="public-chat-title">Inspire Polytechnic Support</h2></div><button type="button" class="public-chat-close" aria-label="Close live chat" data-public-chat-close>&times;</button></header>
       <% if (currentUser && currentUser.role === 'student') { %>
         <p>Continue your conversation with the student support team.</p><a class="button button-primary" href="/student/chat">Open student live chat</a><a class="public-chat-secondary" href="/student/tickets">View your tickets</a>
       <% } else if (currentUser) { %>

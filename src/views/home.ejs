@@ -17,27 +17,27 @@
       </div>
 
       <nav class="info-card" aria-label="Student and visitor support">
-        <a class="info-item" href="/#faq">
-          <span class="big">Answers</span>
-          <span class="small">Browse frequently asked questions</span>
+        <a class="info-item" href="/faq">
+          <span class="big">24/7</span>
+          <span class="small">FAQ assistance</span>
         </a>
         <% if (currentUser && currentUser.role === 'student') { %>
           <a class="info-item" href="/student/chat">
-            <span class="big">Live chat</span>
-            <span class="small">Continue your support conversation</span>
+            <span class="big">Live</span>
+            <span class="small">Support chat</span>
           </a>
           <a class="info-item" href="/student/tickets">
-            <span class="big">My requests</span>
-            <span class="small">Track your support tickets</span>
+            <span class="big">Track</span>
+            <span class="small">Support tickets</span>
           </a>
         <% } else { %>
           <a class="info-item" href="/login">
-            <span class="big">Live chat</span>
-            <span class="small">Sign in to message the support team</span>
+            <span class="big">Live</span>
+            <span class="small">Support chat</span>
           </a>
           <a class="info-item" href="/contact">
-            <span class="big">Enquiry</span>
-            <span class="small">Send a general question</span>
+            <span class="big">Track</span>
+            <span class="small">Support tickets</span>
           </a>
         <% } %>
       </nav>
