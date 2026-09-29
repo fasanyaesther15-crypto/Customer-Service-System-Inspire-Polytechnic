@@ -16,7 +16,7 @@ The application requires a persistent Socket.IO connection and a long-lived Node
 
 1. Create a Supabase project for the application.
 2. Obtain the PostgreSQL connection string appropriate for the deployment environment.
-3. Apply the schema and session-store table from the database design.
+3. Apply `database/schema.sql` to a new database. For an existing database, apply documented migrations in order; do not reapply the initial schema.
 4. Create controlled seed data for initial FAQ records and the first administrator.
 5. Verify constraints, indexes, backups, and connection limits.
 6. Keep credentials in the Render environment settings and local `.env` files only.

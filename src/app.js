@@ -19,6 +19,7 @@ const { registerChatHandlers } = require('./services/chat');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+app.set('io', io);
 
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
 const publicDirectory = path.join(__dirname, 'public');
@@ -56,6 +57,7 @@ app.use(sessionMiddleware);
 app.use((request, response, next) => {
   response.locals.currentUser = request.session.user || null;
   response.locals.currentPath = request.path;
+  response.locals.currentGuestChatId = request.session.user ? null : request.session.guestChatSessionId || null;
   next();
 });
 app.use(rateLimit({
@@ -77,11 +79,18 @@ app.use('/admin', adminRoutes);
 
 io.engine.use(sessionMiddleware);
 io.use((socket, next) => {
-  if (!socket.request.session || !socket.request.session.user) {
-    return next(new Error('Authentication required.'));
+  const session = socket.request.session;
+  if (session && session.user) {
+    return next();
   }
 
-  return next();
+  const validUuid = (value) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value || '');
+  if (session && validUuid(session.guestSessionId) && validUuid(session.guestChatSessionId)) {
+    socket.data.guestSessionId = session.guestSessionId;
+    return next();
+  }
+
+  return next(new Error('Authentication required.'));
 });
 registerChatHandlers(io);
 

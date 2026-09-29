@@ -1,32 +1,80 @@
 <footer class="site-footer">
   <div class="site-footer-inner footer-grid">
     <div class="footer-brand">
-      <div class="brand brand-footer">
+      <a class="brand brand-footer" href="/" aria-label="Inspire Polytechnic home">
         <span class="brand-mark"><img src="/image/422401-removebg-preview.png" alt="" class="brand-logo-image"></span>
-        <span>Inspire Polytechnic</span>
-      </div>
-      <p>Learning, support and student services, brought together in one place.</p>
+        <span class="brand-name">Inspire Polytechnic</span>
+      </a>
+      <p>Practical education and skills development in Lagos.</p>
+      <a class="footer-email" href="mailto:info@inspirepolytechnic.edu.ng">info@inspirepolytechnic.edu.ng</a>
     </div>
-    <div class="footer-col">
-      <h4>Institution</h4>
-      <a href="/about">About</a>
-      <a href="/programmes">Programmes</a>
-      <a href="/admissions">Admissions</a>
-    </div>
-    <div class="footer-col">
-      <h4>Support</h4>
-      <a href="/faq">FAQ</a>
+    <nav class="footer-col" aria-label="Institution links">
+      <h2>Explore</h2>
+      <a href="/#about">About</a>
+      <a href="/#programmes">Programmes</a>
+      <a href="/#admissions">Admissions</a>
+      <a href="/#faq">FAQ</a>
+    </nav>
+    <nav class="footer-col" aria-label="Support and account links">
+      <h2>Support</h2>
       <a href="/contact">Contact</a>
       <a href="/announcements">Announcements</a>
-    </div>
-    <div class="footer-col">
-      <h4>Account</h4>
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
+      <% if (currentUser && currentUser.role === 'student') { %>
+        <a href="/student/dashboard">Student portal</a>
+        <a href="/student/chat">Live chat</a>
+      <% } else if (currentUser) { %>
+        <a href="/support/chats">Support workspace</a>
+      <% } else { %>
+        <a href="/login">Student login</a>
+        <a href="/register">Create an account</a>
+      <% } %>
+    </nav>
+    <div class="footer-col footer-campuses">
+      <h2>Campuses</h2>
+      <address><strong>Yaba</strong> · 3A Ikorodu Road, opposite Jibowu Bus Stop, Yaba, Lagos</address>
+      <div><a href="tel:+2348050437503">0805 0437 503</a> · <a href="tel:+2348058197002">0805 8197 002</a></div>
+      <address><strong>Egbeda</strong> · 39/41 Karimu Laka Street, Egbeda, Lagos</address>
+      <div><a href="tel:+2347059899998">0705 9899 998</a> · <a href="tel:+2347059899996">0705 9899 996</a></div>
     </div>
   </div>
   <div class="site-footer-inner footer-bottom">&copy; 2026 Inspire Polytechnic. All rights reserved.</div>
 </footer>
+
+<% if (!['/login', '/register'].includes(currentPath)) { %>
+  <aside class="public-chat-widget" data-public-chat-widget data-current-role="<%= currentUser ? currentUser.role : 'guest' %>" data-guest-chat-id="<%= currentUser ? '' : currentGuestChatId || '' %>">
+    <button class="public-chat-trigger" type="button" aria-expanded="false" aria-controls="public-chat-panel" data-public-chat-toggle>
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"></path><path d="M8 12h8M8 9h5"></path></svg>
+      <span>Live Chat</span>
+    </button>
+    <section class="public-chat-panel" id="public-chat-panel" role="dialog" aria-labelledby="public-chat-title" hidden>
+      <header><div><p class="eyebrow">Inspire Polytechnic</p><h2 id="public-chat-title">Inspire Polytechnic Support</h2></div><button type="button" class="public-chat-close" aria-label="Close support options" data-public-chat-close>&times;</button></header>
+      <% if (currentUser && currentUser.role === 'student') { %>
+        <p>Continue your conversation with the student support team.</p><a class="button button-primary" href="/student/chat">Open student live chat</a><a class="public-chat-secondary" href="/student/tickets">View your tickets</a>
+      <% } else if (currentUser) { %>
+        <p>Open the support workspace to review student conversations.</p><a class="button button-primary" href="/support/chats">Open support chats</a>
+      <% } else { %>
+        <div class="guest-chat-start" data-guest-chat-start>
+          <p>Hi! How can we help?</p>
+          <form data-guest-start-form>
+            <label for="guest-chat-name">Name</label><input id="guest-chat-name" name="name" type="text" maxlength="150" autocomplete="name" required>
+            <label for="guest-chat-email">Email <span>(optional)</span></label><input id="guest-chat-email" name="email" type="email" maxlength="320" autocomplete="email">
+            <label for="guest-chat-initial-message">Message</label><textarea id="guest-chat-initial-message" name="message" maxlength="10000" required></textarea>
+            <button class="button button-primary" type="submit">Start conversation</button>
+          </form>
+          <p class="guest-chat-error" data-guest-chat-start-error role="alert"></p>
+        </div>
+        <div class="guest-chat-conversation" data-guest-chat-conversation hidden>
+          <div class="guest-chat-conversation-header"><span class="guest-chat-connection" data-guest-chat-connection data-state="connecting">Connecting...</span><button type="button" class="guest-chat-close-conversation" data-guest-chat-close>Close conversation</button></div>
+          <div class="guest-chat-messages" data-guest-chat-messages aria-live="polite"><p class="chat-loading"><span class="loading-indicator" aria-hidden="true"></span>Connecting to support...</p></div>
+          <div class="guest-chat-closed" data-guest-chat-closed hidden><p>This conversation is closed.</p><button type="button" class="button button-quiet" data-guest-chat-new>Start another conversation</button></div>
+          <form class="guest-chat-composer" data-guest-chat-form><label class="sr-only" for="guest-chat-reply">Write a message</label><textarea id="guest-chat-reply" name="message" maxlength="10000" placeholder="Write a message..." required></textarea><button class="button button-primary" type="submit" aria-label="Send message"><span aria-hidden="true">&#8593;</span><span>Send</span></button></form>
+          <p class="guest-chat-error" data-guest-chat-error role="alert"></p>
+        </div>
+      <% } %>
+    </section>
+  </aside>
+<% } %>
+<% if (!['/login', '/register'].includes(currentPath)) { %><script src="/socket.io/socket.io.js"></script><% } %>
 <script src="/js/main.js"></script>
 </body>
 </html>

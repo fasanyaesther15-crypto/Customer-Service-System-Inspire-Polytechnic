@@ -21,7 +21,7 @@ if (menuToggle && navigation) {
     navigation.classList.add('is-open');
     document.body.classList.add('navigation-open');
     const firstLink = navigation.querySelector('a');
-    if (firstLink && window.matchMedia('(max-width: 980px)').matches) firstLink.focus();
+    if (firstLink && window.matchMedia('(max-width: 1100px)').matches) firstLink.focus();
   };
 
   menuToggle.addEventListener('click', () => {
@@ -48,7 +48,7 @@ if (menuToggle && navigation) {
       const wasOpen = menuToggle.getAttribute('aria-expanded') === 'true';
       closeMenu();
       if (wasOpen) menuToggle.focus();
-    } else if (event.key === 'Tab' && menuToggle.getAttribute('aria-expanded') === 'true' && window.matchMedia('(max-width: 980px)').matches) {
+    } else if (event.key === 'Tab' && menuToggle.getAttribute('aria-expanded') === 'true' && window.matchMedia('(max-width: 1100px)').matches) {
       const focusable = [menuToggle, ...navigation.querySelectorAll('a[href], button:not([disabled])')];
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
@@ -58,6 +58,281 @@ if (menuToggle && navigation) {
       } else if (!event.shiftKey && document.activeElement === last) {
         event.preventDefault();
         menuToggle.focus();
+      }
+    }
+  });
+}
+
+const publicChatWidget = document.querySelector('[data-public-chat-widget]');
+if (publicChatWidget) {
+  const toggle = publicChatWidget.querySelector('[data-public-chat-toggle]');
+  const panel = publicChatWidget.querySelector('.public-chat-panel');
+  const close = publicChatWidget.querySelector('[data-public-chat-close]');
+  const guestMode = publicChatWidget.dataset.currentRole === 'guest';
+  const guestStart = publicChatWidget.querySelector('[data-guest-chat-start]');
+  const guestStartForm = publicChatWidget.querySelector('[data-guest-start-form]');
+  const guestStartError = publicChatWidget.querySelector('[data-guest-chat-start-error]');
+  const guestConversation = publicChatWidget.querySelector('[data-guest-chat-conversation]');
+  const guestMessages = publicChatWidget.querySelector('[data-guest-chat-messages]');
+  const guestForm = publicChatWidget.querySelector('[data-guest-chat-form]');
+  const guestInput = guestForm?.elements.message;
+  const guestSend = guestForm?.querySelector('button[type="submit"]');
+  const guestError = publicChatWidget.querySelector('[data-guest-chat-error]');
+  const guestConnection = publicChatWidget.querySelector('[data-guest-chat-connection]');
+  const guestClosed = publicChatWidget.querySelector('[data-guest-chat-closed]');
+  const guestCloseButton = publicChatWidget.querySelector('[data-guest-chat-close]');
+  let guestChatId = publicChatWidget.dataset.guestChatId || '';
+  let guestSocket = null;
+  let guestJoined = false;
+  let guestIsClosed = false;
+  let guestHistoryLoading = false;
+  let guestPendingMessages = [];
+
+  const closePanel = (restoreFocus = false) => {
+    panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) toggle.focus();
+  };
+
+  const setGuestConnection = (label, state = label.toLowerCase().replaceAll(' ', '-')) => {
+    if (!guestConnection) return;
+    guestConnection.textContent = label;
+    guestConnection.dataset.state = state;
+  };
+
+  const setGuestComposerState = () => {
+    const connected = Boolean(guestSocket && guestSocket.connected && guestJoined && !guestIsClosed);
+    guestInput.disabled = !connected;
+    guestSend.disabled = !connected;
+  };
+
+  const appendGuestMessage = (message) => {
+    if (message.id && guestMessages.querySelector(`[data-message-id="${message.id}"]`)) return;
+    guestMessages.querySelector('.chat-loading, .chat-empty-state')?.remove();
+    const createdAt = new Date(message.created_at || Date.now());
+    const day = createdAt.toDateString();
+    const lastMessage = guestMessages.querySelector('.chat-message:last-of-type');
+    if (!lastMessage || lastMessage.dataset.day !== day) {
+      const separator = document.createElement('div');
+      separator.className = 'chat-date-separator';
+      separator.textContent = day === new Date().toDateString() ? 'Today' : createdAt.toLocaleDateString([], { dateStyle: 'long' });
+      guestMessages.appendChild(separator);
+    }
+    const ownMessage = message.sender_id === null || message.sender_kind === 'guest';
+    const bubble = document.createElement('article');
+    bubble.className = `chat-message${ownMessage ? ' is-own' : ''}`;
+    bubble.dataset.day = day;
+    if (message.id) bubble.dataset.messageId = message.id;
+    const author = document.createElement('span');
+    author.className = 'message-author';
+    author.textContent = ownMessage ? 'You' : (message.sender_name || 'Inspire Polytechnic Support');
+    const text = document.createElement('p');
+    text.textContent = message.message;
+    const time = document.createElement('time');
+    time.dateTime = createdAt.toISOString();
+    time.textContent = createdAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    bubble.append(author, text, time);
+    guestMessages.appendChild(bubble);
+    guestMessages.scrollTop = guestMessages.scrollHeight;
+  };
+
+  const markGuestClosed = () => {
+    guestIsClosed = true;
+    setGuestConnection('Conversation closed', 'closed');
+    guestClosed.hidden = false;
+    guestCloseButton.disabled = true;
+    setGuestComposerState();
+  };
+
+  const loadGuestHistory = () => {
+    guestHistoryLoading = true;
+    guestSocket.emit('chat:history', { sessionId: guestChatId }, (result) => {
+      if (result.error) {
+        guestHistoryLoading = false;
+        guestError.textContent = result.error;
+        setGuestConnection('Connection error', 'error');
+        return;
+      }
+      guestMessages.replaceChildren();
+      (result.messages || []).forEach(appendGuestMessage);
+      guestHistoryLoading = false;
+      guestPendingMessages.forEach(appendGuestMessage);
+      guestPendingMessages = [];
+      if (!guestMessages.children.length) {
+        const empty = document.createElement('p');
+        empty.className = 'chat-empty-state';
+        empty.textContent = 'Hi! How can we help?';
+        guestMessages.appendChild(empty);
+      }
+      guestMessages.scrollTop = guestMessages.scrollHeight;
+    });
+  };
+
+  const connectGuestChat = () => {
+    if (!guestChatId || typeof io !== 'function') return;
+    guestStart.hidden = true;
+    guestConversation.hidden = false;
+    guestClosed.hidden = true;
+    guestError.textContent = '';
+    guestIsClosed = false;
+    if (guestSocket) guestSocket.disconnect();
+    guestSocket = io();
+    guestSocket.on('connect', () => {
+      guestJoined = false;
+      setGuestConnection('Connecting...', 'connecting');
+      guestSocket.emit('chat:join', { sessionId: guestChatId }, (result) => {
+        if (result.error) {
+          guestError.textContent = 'This conversation could not be reopened. Start another conversation.';
+          setGuestConnection('Connection error', 'error');
+          setGuestComposerState();
+          return;
+        }
+        guestJoined = true;
+        guestIsClosed = result.status === 'closed';
+        if (guestIsClosed) {
+          markGuestClosed();
+        } else {
+          setGuestConnection(result.supportAvailable ? 'Available' : 'Waiting for an agent', result.supportAvailable ? 'available' : 'waiting');
+          guestClosed.hidden = true;
+          guestCloseButton.disabled = false;
+        }
+        setGuestComposerState();
+        loadGuestHistory();
+      });
+    });
+    guestSocket.on('disconnect', () => {
+      guestJoined = false;
+      if (!guestIsClosed) setGuestConnection('Reconnecting...', 'connecting');
+      setGuestComposerState();
+    });
+    guestSocket.on('connect_error', () => {
+      setGuestConnection('Connection error', 'error');
+      setGuestComposerState();
+    });
+    guestSocket.on('chat:message', (message) => {
+      if (guestHistoryLoading) guestPendingMessages.push(message);
+      else appendGuestMessage(message);
+    });
+    guestSocket.on('chat:closed', markGuestClosed);
+    guestSocket.on('chat:support-presence', ({ available } = {}) => {
+      if (!guestIsClosed) setGuestConnection(available ? 'Available' : 'Waiting for an agent', available ? 'available' : 'waiting');
+    });
+  };
+
+  const showGuestStart = () => {
+    if (guestSocket) {
+      guestSocket.disconnect();
+      guestSocket = null;
+    }
+    guestChatId = '';
+    publicChatWidget.dataset.guestChatId = '';
+    guestJoined = false;
+    guestIsClosed = false;
+    guestConversation.hidden = true;
+    guestStart.hidden = false;
+    guestStartForm.elements.message.value = '';
+    guestStartError.textContent = '';
+  };
+
+  if (guestMode) {
+    guestStartForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submit = guestStartForm.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      guestStartError.textContent = '';
+      try {
+        const response = await fetch('/guest-chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            name: guestStartForm.elements.name.value,
+            email: guestStartForm.elements.email.value,
+            message: guestStartForm.elements.message.value
+          })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Unable to start a conversation.');
+        guestChatId = result.sessionId;
+        publicChatWidget.dataset.guestChatId = guestChatId;
+        connectGuestChat();
+      } catch (error) {
+        guestStartError.textContent = error.message || 'Unable to start a conversation. Please try again.';
+        submit.disabled = false;
+      }
+    });
+
+    guestForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const message = guestInput.value.trim();
+      if (!message || !guestSocket || !guestSocket.connected || !guestJoined || guestIsClosed) return;
+      guestSend.disabled = true;
+      guestSocket.emit('chat:message', { sessionId: guestChatId, message }, (result) => {
+        if (result.error) guestError.textContent = result.error;
+        else {
+          guestInput.value = '';
+          guestError.textContent = '';
+        }
+        setGuestComposerState();
+      });
+    });
+    guestInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        guestForm.requestSubmit();
+      }
+    });
+    guestCloseButton.addEventListener('click', () => {
+      if (!guestSocket || !guestJoined || guestIsClosed) return;
+      guestCloseButton.disabled = true;
+      guestSocket.emit('chat:close', { sessionId: guestChatId }, (result) => {
+        if (result.error) {
+          guestError.textContent = result.error;
+          guestCloseButton.disabled = false;
+        } else markGuestClosed();
+      });
+    });
+    publicChatWidget.querySelector('[data-guest-chat-new]').addEventListener('click', showGuestStart);
+  }
+
+  toggle.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    panel.hidden = isOpen;
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    if (!isOpen) {
+      close.focus();
+      if (guestMode && guestChatId) connectGuestChat();
+    } else if (guestMode && guestSocket) {
+      guestSocket.disconnect();
+      guestSocket = null;
+      guestJoined = false;
+    }
+  });
+
+  close.addEventListener('click', () => closePanel(true));
+  publicChatWidget.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => closePanel());
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!publicChatWidget.contains(event.target)) closePanel();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !panel.hidden) {
+      closePanel(true);
+      return;
+    }
+    if (event.key === 'Tab' && !panel.hidden) {
+      const focusable = [toggle, ...panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled])')];
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     }
   });

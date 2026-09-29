@@ -11,43 +11,21 @@
   </button>
 
   <nav id="site-navigation" class="site-navigation" aria-label="Primary navigation">
-    <% if (!currentUser) { %>
-      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
-      <a class="<%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a>
-      <a class="<%= currentPath === '/programmes' ? 'active' : '' %>" href="/programmes">Programmes</a>
-      <a class="<%= currentPath === '/admissions' ? 'active' : '' %>" href="/admissions">Admissions</a>
-      <a class="<%= currentPath === '/faq' ? 'active' : '' %>" href="/faq">FAQ</a>
-      <a class="<%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
+    <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#programmes">Programmes</a>
+    <a href="/#admissions">Admissions</a>
+    <a href="/#faq">FAQ</a>
+    <a class="<%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a>
+    <% if (currentUser) { %>
+      <% const workspaceHref = currentUser.role === 'administrator' ? '/admin/dashboard' : currentUser.role === 'support_agent' ? '/support/dashboard' : '/student/dashboard'; %>
+      <a href="<%= workspaceHref %>" class="nav-login">Workspace</a>
+      <form method="post" action="/logout" class="nav-logout-form">
+        <button type="submit" class="nav-login">Log out</button>
+      </form>
+    <% } else { %>
       <a href="/login" class="nav-login">Login</a>
       <a href="/register" class="btn-register">Register</a>
-    <% } else if (currentUser.role === 'student') { %>
-      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
-      <a class="<%= currentPath === '/student/dashboard' ? 'active' : '' %>" href="/student/dashboard">Dashboard</a>
-      <a class="<%= currentPath === '/student/tickets' ? 'active' : '' %>" href="/student/tickets">Tickets</a>
-      <a class="<%= currentPath === '/student/chat' ? 'active' : '' %>" href="/student/chat">Chat</a>
-      <form method="post" action="/logout" class="nav-logout-form">
-        <button type="submit" class="nav-login">Log out</button>
-      </form>
-    <% } else if (currentUser.role === 'support_agent') { %>
-      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
-      <a class="<%= currentPath === '/support/dashboard' ? 'active' : '' %>" href="/support/dashboard">Dashboard</a>
-      <a class="<%= currentPath === '/support/tickets' ? 'active' : '' %>" href="/support/tickets">Tickets</a>
-      <a class="<%= currentPath === '/support/chats' ? 'active' : '' %>" href="/support/chats">Chats</a>
-      <form method="post" action="/logout" class="nav-logout-form">
-        <button type="submit" class="nav-login">Log out</button>
-      </form>
-    <% } else if (currentUser.role === 'administrator') { %>
-      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
-      <a class="<%= currentPath === '/admin/dashboard' ? 'active' : '' %>" href="/admin/dashboard">Dashboard</a>
-      <a class="<%= currentPath === '/admin/users' ? 'active' : '' %>" href="/admin/users">Users</a>
-      <a class="<%= currentPath === '/admin/faqs' ? 'active' : '' %>" href="/admin/faqs">FAQs</a>
-      <a class="<%= currentPath === '/admin/announcements' ? 'active' : '' %>" href="/admin/announcements">Announcements</a>
-      <a class="<%= currentPath === '/admin/activity-logs' ? 'active' : '' %>" href="/admin/activity-logs">Activity logs</a>
-      <a class="<%= currentPath === '/support/dashboard' ? 'active' : '' %>" href="/support/dashboard">Tickets</a>
-      <a class="<%= currentPath === '/support/chats' ? 'active' : '' %>" href="/support/chats">Chats</a>
-      <form method="post" action="/logout" class="nav-logout-form">
-        <button type="submit" class="nav-login">Log out</button>
-      </form>
     <% } %>
   </nav>
 </header>

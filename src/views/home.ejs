@@ -1,173 +1,188 @@
 <%- include('partials/head', { pageTitle: 'Home' }) %>
-
-<div class="accent-bar"></div>
+<div class="accent-bar" id="top"></div>
 <%- include('partials/navigation') %>
 
-<section class="hero">
-  <div class="section-inner hero-inner">
-    <div class="hero-copy">
-      <div class="eyebrow">Welcome to Inspire Polytechnic</div>
-      <p class="sr-only">Support that keeps student questions moving.</p>
-      <h1>Learning, support and student services in one place.</h1>
-      <p>Explore institutional information, get instant answers to common questions, or connect with the customer support team.</p>
-      <div class="hero-actions">
-        <a href="/programmes" class="btn btn-primary">Explore Programmes</a>
-        <a href="/contact" class="btn btn-secondary">Get Support</a>
-      </div>
-    </div>
-
-    <div class="info-card">
-      <a href="/faq" class="info-item">
-        <div class="big">24/7</div>
-        <div class="small">FAQ assistance</div>
-      </a>
-      <a href="/student/chat" class="info-item">
-        <div class="big">Live</div>
-        <div class="small">support chat</div>
-      </a>
-      <a href="/student/tickets" class="info-item">
-        <div class="big">Track</div>
-        <div class="small">support tickets</div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="about" id="about">
-  <div class="section-inner about-grid">
-    <div class="about-copy">
-      <div class="eyebrow">About us</div>
-      <h2>Built around every student's journey</h2>
-      <p>Inspire Polytechnic brings admissions, academics and support together in one place, so students spend less time chasing answers and more time learning.</p>
-      <p>Our customer service team and self-serve tools work side by side, giving you a fast answer whether you prefer to search, chat, or speak with someone directly.</p>
-    </div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="num">12,400+</div><div class="label">Students supported</div></div>
-      <div class="stat-card"><div class="num">18</div><div class="label">Programmes offered</div></div>
-      <div class="stat-card"><div class="num">9</div><div class="label">Years of service</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="programmes" id="programmes">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">Programmes</div>
-      <h2>Find the right path for you</h2>
-      <p>Explore our most requested programmes across technology, business and the sciences.</p>
-    </div>
-    <div class="programme-grid">
-      <div class="programme-card">
-        <div class="programme-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img" aria-label="Computer Science icon">
-            <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7A2.5 2.5 0 0 1 17.5 16H13l-2 4h2v1H7v-1h2l-2-4H6.5A2.5 2.5 0 0 1 4 13.5zm2.5-.5h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/>
-          </svg>
+<main>
+  <section class="hero">
+    <div class="section-inner hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Inspire Polytechnic · Lagos</p>
+        <p class="sr-only">Support that keeps student questions moving.</p>
+        <h1 id="home-title">Learning, support and student services in one place.</h1>
+        <p>Explore practical study options, find helpful answers, and connect with the team when you need guidance.</p>
+        <div class="hero-actions">
+          <a href="/#programmes" class="btn btn-primary">Explore Programmes</a>
+          <a href="/contact" class="btn btn-secondary">Get Support</a>
         </div>
-        <h3>Computer Science</h3>
-        <p>Software development, systems and networking foundations for the tech industry.</p>
-        <a href="#">Learn more</a>
       </div>
-      <div class="programme-card">
-        <div class="programme-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img" aria-label="Business Administration icon">
-            <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5zm4 1.7v4.8L12 17l5-2v-4.8L12 14l-5-3.8zm-1.5 5.8h13v1.5h-13z"/>
-          </svg>
-        </div>
-        <h3>Business Administration</h3>
-        <p>Management, finance and entrepreneurship skills for future business leaders.</p>
-        <a href="#">Learn more</a>
-      </div>
-      <div class="programme-card">
-        <div class="programme-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img" aria-label="Engineering Technology icon">
-            <path d="M12 2v4.5M9.5 5.5l5 13M4.5 11.5l4.5-1.5 1.5 4.5-4.5 1.5-1.5-4.5zm14.5 0l-4.5-1.5-1.5 4.5 4.5 1.5 1.5-4.5zM12 16v6"/>
-          </svg>
-        </div>
-        <h3>Engineering Technology</h3>
-        <p>Hands-on training across mechanical, electrical and civil disciplines.</p>
-        <a href="#">Learn more</a>
-      </div>
-      <div class="programme-card">
-        <div class="programme-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img" aria-label="Mass Communication icon">
-            <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h11A2.5 2.5 0 0 1 19 7.5v6A2.5 2.5 0 0 1 16.5 16H9l-5 4v-4.5A2.5 2.5 0 0 1 3 13.5zm3.5-1.5h8v2h-8zm0 4h6v2h-6zm-2 5h11v1.5H4.5z"/>
-          </svg>
-        </div>
-        <h3>Mass Communication</h3>
-        <p>Media production, journalism and public relations for the modern communicator.</p>
-        <a href="#">Learn more</a>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section id="admissions">
-  <div class="section-inner">
-    <div class="cta-banner">
-      <div>
-        <h2>Ready to begin your admission?</h2>
-        <p>Start your application today or chat with our support team if you have questions along the way.</p>
-      </div>
-      <a href="/admissions" class="btn btn-secondary">Start Application</a>
+      <nav class="info-card" aria-label="Student and visitor support">
+        <a class="info-item" href="/#faq">
+          <span class="big">Answers</span>
+          <span class="small">Browse frequently asked questions</span>
+        </a>
+        <% if (currentUser && currentUser.role === 'student') { %>
+          <a class="info-item" href="/student/chat">
+            <span class="big">Live chat</span>
+            <span class="small">Continue your support conversation</span>
+          </a>
+          <a class="info-item" href="/student/tickets">
+            <span class="big">My requests</span>
+            <span class="small">Track your support tickets</span>
+          </a>
+        <% } else { %>
+          <a class="info-item" href="/login">
+            <span class="big">Live chat</span>
+            <span class="small">Sign in to message the support team</span>
+          </a>
+          <a class="info-item" href="/contact">
+            <span class="big">Enquiry</span>
+            <span class="small">Send a general question</span>
+          </a>
+        <% } %>
+      </nav>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="faq" id="faq">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">FAQ</div>
-      <h2>Common questions</h2>
-      <p>Can't find what you're looking for? Our support team is available around the clock.</p>
-    </div>
-    <div class="faq-list">
-      <details class="faq-item" open>
-        <summary>How do I apply for admission?</summary>
-        <p>Click "Start Application" above, create an account, and follow the guided steps to submit your documents online.</p>
-      </details>
-      <details class="faq-item">
-        <summary>What programmes are currently open for enrollment?</summary>
-        <p>All programmes listed above are open for the current academic session. Visit the Programmes page for full details and requirements.</p>
-      </details>
-      <details class="faq-item">
-        <summary>How can I reach customer support?</summary>
-        <p>Use the Live Chat button on any page, raise a support ticket, or reach us through the contact details in the footer.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Can I track the status of my support ticket?</summary>
-        <p>Yes. Once logged in, your ticket history and live status are available from your student dashboard.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="brand">
-        <div class="brand-mark"><img src="/image/422401-removebg-preview.png" alt="" class="brand-logo-image"></div>
-        <div class="brand-name">Inspire Polytechnic</div>
+  <section class="why-inspire home-section" aria-labelledby="why-title">
+    <div class="section-inner why-inspire-grid">
+      <div class="why-inspire-image">
+        <img src="/image/inspire-students.webp" alt="Students at Inspire Polytechnic" loading="lazy" width="1024" height="962">
+        <span>Learning at Inspire Polytechnic</span>
       </div>
-      <p>Learning, support and student services, brought together in one place.</p>
+      <div class="why-inspire-copy">
+        <p class="eyebrow">Why Inspire</p>
+        <h2 id="why-title">Learn by thinking, making and doing.</h2>
+        <p>Inspire Polytechnic describes its approach as practical, learner-centred and outcome-focused. Learning includes problem-based activities, critical thinking and project analysis.</p>
+        <p>Students engage with real-world problems and business cases while developing professional skills and character alongside their studies.</p>
+        <a class="text-link" href="/#about">About the institution <span aria-hidden="true">&#8594;</span></a>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Institution</h4>
-      <a href="/about">About</a>
-      <a href="/programmes">Programmes</a>
-      <a href="/admissions">Admissions</a>
+  </section>
+
+  <section class="institution-highlights" aria-label="Inspire Polytechnic at a glance">
+    <div class="section-inner institution-highlight-grid">
+      <article><span class="highlight-mark" aria-hidden="true">01</span><div><strong>Practical learning</strong><p>Study through projects, problems and applied work.</p></div></article>
+      <article><span class="highlight-mark" aria-hidden="true">02</span><div><strong>Study pathways</strong><p>National Diploma and vocational course options.</p></div></article>
+      <article><span class="highlight-mark" aria-hidden="true">03</span><div><strong>Lagos campuses</strong><p>Find the Yaba and Egbeda campus details below.</p></div></article>
     </div>
-    <div class="footer-col">
-      <h4>Support</h4>
-      <a href="/faq">FAQ</a>
-      <a href="/student/chat">Live Chat</a>
-      <a href="/student/tickets">Track Ticket</a>
+  </section>
+
+  <section class="programmes home-section" id="programmes" aria-labelledby="programmes-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <p class="eyebrow">Programmes</p>
+        <h2 id="programmes-title">Choose a direction that fits your ambitions.</h2>
+        <p>Explore selected National Diploma and vocational course options. Contact the institution for current course details.</p>
+      </div>
+      <% const featuredProgrammes = programmeGroups.flatMap((group) => group.programmes.map((name) => ({ name, category: group.category }))).slice(0, 6); %>
+      <div class="programme-grid home-programme-grid">
+        <% featuredProgrammes.forEach((programme) => { %>
+          <article class="programme-card home-programme-card">
+            <span class="programme-category"><%= programme.category %></span>
+            <h3><%= programme.name %></h3>
+            <a href="/contact">Ask about this programme <span aria-hidden="true">&#8594;</span></a>
+          </article>
+        <% }); %>
+      </div>
+      <a class="text-link programme-directory-link" href="/programmes">View programme directory <span aria-hidden="true">&#8594;</span></a>
     </div>
-    <div class="footer-col">
-      <h4>Account</h4>
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
+  </section>
+
+  <section class="about home-section" id="about" aria-labelledby="about-title">
+    <div class="section-inner about-grid">
+      <div class="about-copy">
+        <p class="eyebrow">About Inspire Polytechnic</p>
+        <h2 id="about-title">Practical education for a changing world.</h2>
+      </div>
+      <div class="prose about-prose">
+        <p>Inspire Polytechnic provides National Diploma and vocational learning in Lagos, with a focus on education, skills development and practical experience.</p>
+        <p>Its teaching approach combines structured learning with problem-based work, critical thinking, project analysis and real-world cases.</p>
+        <a class="text-link" href="/#campuses">Find a campus <span aria-hidden="true">&#8594;</span></a>
+      </div>
     </div>
-  </div>
-  <div class="footer-bottom">&copy; 2026 Inspire Polytechnic. All rights reserved.</div>
-</footer>
-<script src="/js/main.js"></script>
+  </section>
+
+  <section class="campuses home-section" id="campuses" aria-labelledby="campuses-title">
+    <div class="section-inner">
+      <div class="section-head campus-section-head">
+        <p class="eyebrow">Visit Inspire</p>
+        <h2 id="campuses-title">Two campuses in Lagos.</h2>
+        <p>Contact the campus team for directions and current visit information.</p>
+      </div>
+      <div class="campus-grid">
+        <article class="campus-item">
+          <p class="eyebrow">Yaba Campus</p>
+          <h3>Yaba, Lagos</h3>
+          <address>3A Ikorodu Road,<br>Opposite Jibowu Bus Stop,<br>Yaba, Lagos, Nigeria</address>
+          <div class="campus-contacts"><a href="tel:+2348050437503">0805 0437 503</a><a href="tel:+2348058197002">0805 8197 002</a></div>
+        </article>
+        <article class="campus-item">
+          <p class="eyebrow">Egbeda Campus</p>
+          <h3>Egbeda, Lagos</h3>
+          <address>39/41 Karimu Laka Street,<br>Egbeda, Lagos, Nigeria</address>
+          <div class="campus-contacts"><a href="tel:+2347059899998">0705 9899 998</a><a href="tel:+2347059899996">0705 9899 996</a></div>
+        </article>
+        <aside class="campus-contact-note"><strong>Need admissions guidance?</strong><p>Ask the team about course information and next steps.</p><a href="mailto:info@inspirepolytechnic.edu.ng">info@inspirepolytechnic.edu.ng</a></aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="admissions home-section" id="admissions" aria-labelledby="admissions-title">
+    <div class="section-inner">
+      <div class="admissions-intro">
+        <p class="eyebrow">Admissions</p>
+        <h2 id="admissions-title">Start your journey at Inspire Polytechnic.</h2>
+        <p>Explore a course, speak with the admissions team, and get the current guidance for your preferred study route.</p>
+      </div>
+      <ol class="admissions-pathway">
+        <li><span>01</span><div><strong>Explore programmes</strong><p>Review the National Diploma and vocational options.</p></div></li>
+        <li><span>02</span><div><strong>Discuss your course</strong><p>Ask about the current course information and campus.</p></div></li>
+        <li><span>03</span><div><strong>Get admissions guidance</strong><p>The institution can provide current requirements and next steps.</p></div></li>
+      </ol>
+      <div class="admissions-actions"><a class="button button-primary" href="/#programmes">Explore programmes</a><a class="button button-quiet" href="/contact">Contact admissions</a><a class="text-link" href="/#faq">Read FAQs</a></div>
+    </div>
+  </section>
+
+  <% if (announcements.length) { %>
+    <section class="home-announcements home-section" aria-labelledby="announcements-title">
+      <div class="section-inner">
+        <div class="section-head"><p class="eyebrow">News and updates</p><h2 id="announcements-title">From Inspire Polytechnic</h2></div>
+        <div class="home-announcement-list">
+          <% announcements.forEach((announcement) => { %>
+            <article><time datetime="<%= new Date(announcement.published_at || announcement.created_at).toISOString() %>"><%= new Date(announcement.published_at || announcement.created_at).toLocaleDateString() %></time><h3><%= announcement.title %></h3><p><%= announcement.body %></p></article>
+          <% }); %>
+        </div>
+        <a class="text-link" href="/announcements">All announcements <span aria-hidden="true">&#8594;</span></a>
+      </div>
+    </section>
+  <% } %>
+
+  <section class="faq home-section" id="faq" aria-labelledby="faq-title">
+    <div class="section-inner faq-home-layout">
+      <div class="faq-home-intro">
+        <p class="eyebrow">Frequently asked questions</p>
+        <h2 id="faq-title">A good place to start.</h2>
+        <p>Browse answers maintained by the Inspire Polytechnic team. Questions are matched against the published FAQ content.</p>
+        <a class="text-link" href="/faq">Search all FAQs <span aria-hidden="true">&#8594;</span></a>
+      </div>
+      <div class="faq-list">
+        <% if (!faqs.length) { %>
+          <div class="faq-home-empty"><p>Frequently asked questions are being prepared.</p><a href="/contact">Send a general enquiry</a></div>
+        <% } else { %>
+          <% faqs.slice(0, 4).forEach((faq) => { %>
+            <details class="faq-item"><summary><%= faq.question %></summary><p><%= faq.answer %></p></details>
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <section class="support-cta home-section" id="support" aria-labelledby="support-title">
+    <div class="section-inner support-cta-inner">
+      <div><p class="eyebrow">Customer support</p><h2 id="support-title">Need help finding your next step?</h2><p>Browse an answer, send a general enquiry, or sign in to continue a student support conversation.</p></div>
+      <div class="support-cta-actions"><a class="button button-primary" href="/contact">Send an enquiry</a><a class="button button-quiet" href="/faq">Browse FAQs</a><a class="text-link" href="/login">Student live chat <span aria-hidden="true">&#8594;</span></a></div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

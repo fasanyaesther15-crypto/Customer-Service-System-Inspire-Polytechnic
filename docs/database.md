@@ -57,16 +57,20 @@ PostgreSQL hosted by Supabase is the final database decision. It replaces SQLite
 ### `chat_sessions`
 
 - `id` UUID primary key.
-- `student_id` UUID foreign key to `users`, required.
+- `student_id` UUID foreign key to `users`, required for student-owned sessions.
+- `guest_session_id` UUID, required instead of `student_id` for a guest-owned session. It is stored only in the server-side Express session and is never sent to the browser.
+- `guest_name` varchar, required for guest-owned sessions.
+- `guest_email` varchar, optional for guest-owned sessions.
 - `assigned_agent_id` UUID foreign key to `users`, nullable.
 - `status` varchar, required; `open`, `assigned`, or `closed`.
 - `started_at`, `updated_at`, and `closed_at` timestamptz as applicable.
+- An owner check constraint requires exactly one student or guest owner.
 
 ### `chat_messages`
 
 - `id` UUID primary key.
 - `chat_session_id` UUID foreign key to `chat_sessions`, required.
-- `sender_id` UUID foreign key to `users`, required.
+- `sender_id` UUID foreign key to `users`, nullable only for guest-authored messages.
 - `message` text, required.
 - `created_at` timestamptz, required.
 
@@ -111,6 +115,7 @@ PostgreSQL hosted by Supabase is the final database decision. It replaces SQLite
 - `tickets` 1-to-many `ticket_messages`.
 - `users` 1-to-many `ticket_messages`.
 - `users` 1-to-many `chat_sessions` as student or assigned agent.
+- A guest server-session identity 1-to-many `chat_sessions` for unauthenticated visitors.
 - `chat_sessions` 1-to-many `chat_messages`.
 - `users` 1-to-many `chat_messages`.
 - `users` 1-to-many `faqs`, `announcements`, and `activity_logs` through creator/actor fields.
@@ -122,6 +127,7 @@ PostgreSQL hosted by Supabase is the final database decision. It replaces SQLite
 - Indexes on `tickets.student_id`, `tickets.assigned_agent_id`, `tickets.status`, and `tickets.created_at`.
 - Indexes on `ticket_messages.ticket_id` and `chat_messages.chat_session_id` with creation time for ordered history.
 - Indexes on `chat_sessions.student_id`, `chat_sessions.assigned_agent_id`, and `chat_sessions.status`.
+- Partial index on `chat_sessions.guest_session_id` for guest ownership checks.
 - Index on active/published FAQ and announcement states.
 - Indexes on `activity_logs.actor_id`, `activity_logs.entity_type/entity_id`, and `activity_logs.created_at`.
 - Foreign keys should use deliberate delete behavior: preserve ticket and activity history rather than cascading it from a user; implementation must decide whether deactivation is preferable to deletion.
@@ -132,6 +138,8 @@ PostgreSQL hosted by Supabase is the final database decision. It replaces SQLite
 A ticket message sender must be authenticated and authorized for the ticket. A chat message sender must belong to the chat session or be an authorized support user. Only active FAQs are eligible for automated answers. Timestamps and state transitions must be updated in the same logical operation as the action that caused them.
 
 ## Applying the Schema
+
+For an existing installation, apply `database/migrations/20260929_guest_chat.sql` after the original schema. The migration keeps all student-owned records valid, adds guest session ownership and display fields, and permits null `sender_id` for guest-authored chat messages. Do not reapply the initial schema to an existing database.
 
 The schema is intended for a new Supabase PostgreSQL database and contains no destructive `DROP` statements. From the repository root, apply it with the PostgreSQL client using a configured connection string:
 

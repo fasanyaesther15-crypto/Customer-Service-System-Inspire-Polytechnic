@@ -63,23 +63,31 @@ CREATE INDEX ticket_messages_ticket_created_idx
 
 CREATE TABLE chat_sessions (
 	id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-	student_id uuid NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
+	student_id uuid REFERENCES users (id) ON DELETE RESTRICT,
+	guest_session_id uuid,
+	guest_name varchar(150),
+	guest_email varchar(320),
 	assigned_agent_id uuid REFERENCES users (id) ON DELETE SET NULL,
 	status varchar(20) NOT NULL DEFAULT 'open',
 	started_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	closed_at timestamptz,
-	CONSTRAINT chat_sessions_status_check CHECK (status IN ('open', 'assigned', 'closed'))
+	CONSTRAINT chat_sessions_status_check CHECK (status IN ('open', 'assigned', 'closed')),
+	CONSTRAINT chat_sessions_owner_check CHECK (
+		(student_id IS NOT NULL AND guest_session_id IS NULL AND guest_name IS NULL AND guest_email IS NULL)
+		OR (student_id IS NULL AND guest_session_id IS NOT NULL AND guest_name IS NOT NULL AND length(btrim(guest_name)) > 0)
+	)
 );
 
 CREATE INDEX chat_sessions_student_idx ON chat_sessions (student_id);
+CREATE INDEX chat_sessions_guest_session_idx ON chat_sessions (guest_session_id) WHERE guest_session_id IS NOT NULL;
 CREATE INDEX chat_sessions_assigned_agent_idx ON chat_sessions (assigned_agent_id);
 CREATE INDEX chat_sessions_status_idx ON chat_sessions (status);
 
 CREATE TABLE chat_messages (
 	id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
 	chat_session_id uuid NOT NULL REFERENCES chat_sessions (id) ON DELETE CASCADE,
-	sender_id uuid NOT NULL REFERENCES users (id) ON DELETE RESTRICT,
+	sender_id uuid REFERENCES users (id) ON DELETE RESTRICT,
 	message text NOT NULL,
 	created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

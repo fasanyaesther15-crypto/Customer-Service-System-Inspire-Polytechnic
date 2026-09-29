@@ -9,6 +9,7 @@ const {
   showFaq,
   showHome,
   showProgrammes,
+  startGuestChat,
   submitContact
 } = require('../controllers/public');
 
@@ -27,6 +28,13 @@ const faqRateLimit = rateLimit({
   legacyHeaders: false,
   message: 'Too many FAQ searches. Please try again later.'
 });
+const guestChatRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Too many new conversations. Please try again later.' }
+});
 
 router.get('/', showHome);
 router.get('/about', showAbout);
@@ -37,5 +45,6 @@ router.post('/faq', faqRateLimit, askFaq);
 router.get('/announcements', showAnnouncements);
 router.get('/contact', showContact);
 router.post('/contact', contactRateLimit, submitContact);
+router.post('/guest-chat', guestChatRateLimit, startGuestChat);
 
 module.exports = router;

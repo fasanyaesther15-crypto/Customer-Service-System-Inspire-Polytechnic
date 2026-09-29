@@ -1,27 +1,36 @@
 <%- include('partials/head', { pageTitle }) %>
 <%- include('partials/navigation') %>
 <main class="page-shell public-page">
-  <header class="page-intro page-intro-compact">
-    <p class="eyebrow">General enquiry</p>
+  <header class="page-intro contact-page-intro">
+    <p class="eyebrow">Contact Inspire Polytechnic</p>
     <h1>How can we help?</h1>
-    <p class="lead">Send a question to the customer service team. This form creates a general enquiry, not a support ticket.</p>
+    <p class="lead">Talk with the right team. Choose the contact route that fits your question.</p>
   </header>
 
   <% if (success) { %><p class="form-success" role="status">Your enquiry was received. Thank you for getting in touch.</p><% } %>
-  <% if (errors.length) { %>
-    <div class="form-errors" role="alert"><% errors.forEach((error) => { %><p><%= error %></p><% }); %></div>
-  <% } %>
+  <% if (errors.length) { %><div class="form-errors" role="alert"><% errors.forEach((error) => { %><p><%= error %></p><% }); %></div><% } %>
 
-  <form method="post" action="/contact" class="contact-form public-panel">
-    <div class="form-grid">
-      <div><label for="name">Name</label><input id="name" name="name" type="text" value="<%= values.name || '' %>" autocomplete="name" required></div>
-      <div><label for="email">Email address</label><input id="email" name="email" type="email" value="<%= values.email || '' %>" autocomplete="email" required></div>
-    </div>
-    <label for="subject">Subject</label>
-    <input id="subject" name="subject" type="text" value="<%= values.subject || '' %>" required>
-    <label for="message">Message</label>
-    <textarea id="message" name="message" rows="7" required><%= values.message || '' %></textarea>
-    <button class="button button-primary" type="submit">Send enquiry</button>
-  </form>
+  <div class="contact-page-layout">
+    <section class="contact-information" aria-labelledby="contact-info-title">
+      <div class="contact-copy"><p class="eyebrow">General enquiry</p><h2 id="contact-info-title">Contact the institution</h2><p>Use the enquiry form for general questions about Inspire Polytechnic. A general enquiry is not a student support ticket.</p><a class="contact-email" href="mailto:info@inspirepolytechnic.edu.ng">info@inspirepolytechnic.edu.ng</a></div>
+      <div class="contact-campus-list">
+        <article class="contact-campus"><p class="eyebrow">Yaba Campus</p><h3>Yaba, Lagos</h3><address>3A Ikorodu Road,<br>Opposite Jibowu Bus Stop,<br>Yaba, Lagos, Nigeria</address><a href="tel:+2348050437503">0805 0437 503</a><a href="tel:+2348058197002">0805 8197 002</a></article>
+        <article class="contact-campus"><p class="eyebrow">Egbeda Campus</p><h3>Egbeda, Lagos</h3><address>39/41 Karimu Laka Street,<br>Egbeda, Lagos, Nigeria</address><a href="tel:+2347059899998">0705 9899 998</a><a href="tel:+2347059899996">0705 9899 996</a></article>
+      </div>
+    </section>
+
+    <section class="contact-form-panel" aria-labelledby="enquiry-form-title">
+      <div class="contact-form-heading"><p class="eyebrow">General enquiry</p><h2 id="enquiry-form-title">Send an enquiry</h2><p>Your message will be sent to the customer service team.</p></div>
+      <form method="post" action="/contact" class="contact-form">
+        <div class="form-grid">
+          <div><label for="name">Name</label><input id="name" name="name" type="text" value="<%= values.name || '' %>" maxlength="150" autocomplete="name" required></div>
+          <div><label for="email">Email address</label><input id="email" name="email" type="email" value="<%= values.email || '' %>" autocomplete="email" required></div>
+        </div>
+        <label for="subject">Subject</label><input id="subject" name="subject" type="text" value="<%= values.subject || '' %>" maxlength="200" required>
+        <label for="message">Message</label><textarea id="message" name="message" rows="7" maxlength="10000" required><%= values.message || '' %></textarea>
+        <button class="button button-primary" type="submit">Send enquiry</button>
+      </form>
+    </section>
+  </div>
 </main>
 <%- include('partials/footer') %>
