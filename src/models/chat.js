@@ -12,10 +12,13 @@ async function createChatSession(studentId) {
 
 async function findChatSessionForUser(sessionId, user) {
   const result = await query(
-    `SELECT id, student_id, assigned_agent_id, status, started_at, updated_at, closed_at
+    `SELECT chat_sessions.id, chat_sessions.student_id, chat_sessions.assigned_agent_id,
+            chat_sessions.status, chat_sessions.started_at, chat_sessions.updated_at,
+            chat_sessions.closed_at, students.full_name AS student_name
      FROM chat_sessions
-     WHERE id = $1
-       AND (student_id = $2 OR $3 IN ('support_agent', 'administrator'))`,
+     JOIN users students ON students.id = chat_sessions.student_id
+    WHERE chat_sessions.id = $1
+       AND (chat_sessions.student_id = $2 OR $3 IN ('support_agent', 'administrator'))`,
     [sessionId, user.id, user.role]
   );
   return result.rows[0] || null;
@@ -84,10 +87,16 @@ async function listChatSessions() {
   const result = await query(
     `SELECT chat_sessions.id, chat_sessions.status, chat_sessions.started_at,
             chat_sessions.updated_at, chat_sessions.assigned_agent_id,
-            students.full_name AS student_name, agents.full_name AS agent_name
+            students.full_name AS student_name, agents.full_name AS agent_name,
+            recent.message AS last_message
      FROM chat_sessions
      JOIN users students ON students.id = chat_sessions.student_id
      LEFT JOIN users agents ON agents.id = chat_sessions.assigned_agent_id
+     LEFT JOIN LATERAL (
+       SELECT message FROM chat_messages
+       WHERE chat_session_id = chat_sessions.id
+       ORDER BY created_at DESC LIMIT 1
+     ) recent ON true
      ORDER BY chat_sessions.updated_at DESC`
   );
   return result.rows;

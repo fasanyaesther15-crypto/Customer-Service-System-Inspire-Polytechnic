@@ -1,1 +1,34 @@
-<%- include('../partials/head', { pageTitle }) %><%- include('../partials/navigation') %><main class="page-shell portal-page"><p class="eyebrow">Administration</p><h1>Users.</h1><div class="ticket-list"><% users.forEach((user) => { %><div class="ticket-row"><span><strong><%= user.full_name %></strong><small><%= user.email %></small></span><form method="post" action="/admin/users/<%= user.id %>"><select name="role"><% ['student','support_agent','administrator'].forEach((role) => { %><option value="<%= role %>" <%= user.role === role ? 'selected' : '' %>><%= role %></option><% }) %></select><label><input type="checkbox" name="isActive" value="true" <%= user.is_active ? 'checked' : '' %>> Active</label><button class="button button-quiet" type="submit">Save</button></form></div><% }) %></div></main><%- include('../partials/footer') %>
+<%- include('../partials/app-start', { pageTitle }) %>
+<header class="app-page-header"><p class="eyebrow">Administration</p><h1>Users</h1><p class="lead">Manage student, support and administrator accounts.</p></header>
+<section class="user-metrics" aria-label="User totals">
+	<div><strong><%= users.length %></strong><span>Total users</span></div>
+	<div><strong><%= users.filter((user) => user.role === 'student').length %></strong><span>Students</span></div>
+	<div><strong><%= users.filter((user) => user.role === 'support_agent').length %></strong><span>Support agents</span></div>
+	<div><strong><%= users.filter((user) => user.role === 'administrator').length %></strong><span>Administrators</span></div>
+	<div><strong><%= users.filter((user) => user.is_active).length %></strong><span>Active users</span></div>
+</section>
+<section class="user-directory" aria-label="User management">
+	<div class="directory-toolbar">
+		<label class="directory-search"><span class="sr-only">Search users</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input type="search" placeholder="Search users..." data-user-search></label>
+		<label><span class="sr-only">Filter by role</span><select data-user-role-filter><option value="">All roles</option><option value="student">Student</option><option value="support_agent">Support Agent</option><option value="administrator">Administrator</option></select></label>
+		<label><span class="sr-only">Filter by status</span><select data-user-status-filter><option value="">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option></select></label>
+		<span class="directory-result-count" data-user-result-count><%= users.length %> users</span>
+	</div>
+	<div class="user-table-wrap">
+		<table class="user-table">
+			<thead><tr><th scope="col">User</th><th scope="col">Role</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+			<tbody data-user-list>
+				<% users.forEach((user) => { const roleLabel = user.role === 'support_agent' ? 'Support Agent' : user.role === 'administrator' ? 'Administrator' : 'Student'; const initials = user.full_name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase(); %>
+					<tr class="user-table-row" data-user-row data-name="<%= user.full_name.toLowerCase() %>" data-email="<%= user.email.toLowerCase() %>" data-role="<%= user.role %>" data-status="<%= user.is_active ? 'active' : 'inactive' %>">
+						<td data-label="User"><div class="managed-user"><span class="user-avatar"><%= initials %></span><span><strong><%= user.full_name %></strong><small><%= user.email %></small></span></div></td>
+						<td data-label="Role"><label class="sr-only" for="role-<%= user.id %>">Role for <%= user.full_name %></label><select id="role-<%= user.id %>" data-user-role><option value="student" <%= user.role === 'student' ? 'selected' : '' %>>Student</option><option value="support_agent" <%= user.role === 'support_agent' ? 'selected' : '' %>>Support Agent</option><option value="administrator" <%= user.role === 'administrator' ? 'selected' : '' %>>Administrator</option></select></td>
+						<td data-label="Status"><form id="user-form-<%= user.id %>" class="user-edit-form" method="post" action="/admin/users/<%= user.id %>" data-user-form><input type="hidden" name="role" value="<%= user.role %>" data-user-role-value><label class="user-status-control"><input type="checkbox" name="isActive" value="true" <%= user.is_active ? 'checked' : '' %> data-user-active><span class="toggle-track" aria-hidden="true"></span><span class="status-badge <%= user.is_active ? 'user-status-active' : 'user-status-inactive' %>" data-user-status-label><%= user.is_active ? 'Active' : 'Inactive' %></span></label></form></td>
+						<td data-label="Actions"><button class="button button-primary user-save-button" type="submit" form="user-form-<%= user.id %>" data-user-save disabled>Save changes</button></td>
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+		<p class="inline-empty" data-user-empty <%= users.length ? 'hidden' : '' %>>No users match these filters.</p>
+	</div>
+</section>
+<%- include('../partials/app-end') %>

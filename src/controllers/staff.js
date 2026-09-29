@@ -5,19 +5,55 @@ const statuses = ['open', 'assigned', 'in progress', 'pending', 'resolved', 'clo
 function safeId(value) { return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value || ''); }
 function ticketData(body) { return { status: String(body.status || ''), message: String(body.message || '').trim() }; }
 
-async function dashboard(request, response, next) { try { return response.render('staff/dashboard', { pageTitle: 'Support dashboard', tickets: await staff.listSupportTickets() }); } catch (e) { return next(e); } }
+async function dashboard(request, response, next) {
+	try {
+		const [tickets, sessions] = await Promise.all([staff.listSupportTickets(), chat.listChatSessions()]);
+		return response.render('staff/dashboard', {
+			pageTitle: 'Support dashboard',
+			tickets,
+			sessions,
+			metrics: {
+				openTickets: tickets.filter((ticket) => !['resolved', 'closed'].includes(ticket.status)).length,
+				urgentTickets: tickets.filter((ticket) => ['high', 'urgent'].includes(ticket.priority) && !['resolved', 'closed'].includes(ticket.status)).length,
+				activeChats: sessions.filter((session) => session.status !== 'closed').length
+			}
+		});
+	} catch (e) { return next(e); }
+}
 async function tickets(request, response, next) { try { return response.render('staff/tickets', { pageTitle: 'Support tickets', tickets: await staff.listSupportTickets() }); } catch (e) { return next(e); } }
 async function ticket(request, response, next) { try { if (!safeId(request.params.id)) return response.status(404).render('error', { statusCode: 404, message: 'Ticket not found.' }); const value = await staff.findStaffTicket(request.params.id); if (!value) return response.status(404).render('error', { statusCode: 404, message: 'Ticket not found.' }); return response.render('staff/ticket', { pageTitle: value.subject, ticket: value, messages: await staff.listTicketMessages(value.id), statuses }); } catch (e) { return next(e); } }
 async function updateTicket(request, response, next) { const data = ticketData(request.body); if (!statuses.includes(data.status) || !safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid ticket update.' }); try { if (!await staff.findStaffTicket(request.params.id)) return response.status(404).render('error', { statusCode: 404, message: 'Ticket not found.' }); await staff.updateTicket(request.params.id, request.session.user.id, data.status); await staff.logActivity(request.session.user.id, 'ticket_updated', 'ticket', request.params.id, { status: data.status }); return response.redirect(`/support/tickets/${request.params.id}`); } catch (e) { return next(e); } }
 async function assignTicket(request, response, next) { if (!safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid ticket.' }); try { if (!await staff.findStaffTicket(request.params.id)) return response.status(404).render('error', { statusCode: 404, message: 'Ticket not found.' }); await staff.updateTicket(request.params.id, request.session.user.id, 'assigned'); await staff.logActivity(request.session.user.id, 'ticket_assigned', 'ticket', request.params.id); return response.redirect(`/support/tickets/${request.params.id}`); } catch (e) { return next(e); } }
 async function message(request, response, next) { const data = ticketData(request.body); if (!safeId(request.params.id) || !data.message || data.message.length > 10000) return response.status(400).render('error', { statusCode: 400, message: 'Enter a valid response.' }); try { if (!await staff.findStaffTicket(request.params.id)) return response.status(404).render('error', { statusCode: 404, message: 'Ticket not found.' }); await staff.addStaffMessage(request.params.id, request.session.user.id, data.message); await staff.logActivity(request.session.user.id, 'ticket_message_added', 'ticket', request.params.id); return response.redirect(`/support/tickets/${request.params.id}`); } catch (e) { return next(e); } }
 async function chats(request, response, next) { try { return response.render('staff/chats', { pageTitle: 'Chat monitoring', sessions: await chat.listChatSessions() }); } catch (e) { return next(e); } }
-async function chatDetail(request, response, next) { if (!safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid chat session.' }); try { const session = await chat.findChatSessionForUser(request.params.id, request.session.user); if (!session) return response.status(404).render('error', { statusCode: 404, message: 'Chat session not found.' }); return response.render('staff/chat', { pageTitle: 'Chat session', session, messages: await chat.findChatMessages(session.id, request.session.user) }); } catch (e) { return next(e); } }
+async function chatDetail(request, response, next) { if (!safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid chat session.' }); try { const session = await chat.findChatSessionForUser(request.params.id, request.session.user); if (!session) return response.status(404).render('error', { statusCode: 404, message: 'Chat session not found.' }); const [messages, sessions] = await Promise.all([chat.findChatMessages(session.id, request.session.user), chat.listChatSessions()]); return response.render('staff/chat', { pageTitle: 'Chat session', session, sessions, messages }); } catch (e) { return next(e); } }
 async function replyChat(request, response, next) { const message = String(request.body.message || '').trim(); if (!safeId(request.params.id) || !message || message.length > 10000) return response.status(400).render('error', { statusCode: 400, message: 'Enter a valid response.' }); try { const session = await chat.findChatSessionForUser(request.params.id, request.session.user); if (!session) return response.status(404).render('error', { statusCode: 404, message: 'Chat session not found.' }); const saved = await chat.addChatMessage(session.id, request.session.user.id, message); if (!saved) return response.status(400).render('error', { statusCode: 400, message: 'Chat session is closed.' }); await staff.logActivity(request.session.user.id, 'chat_message_added', 'chat_session', session.id, { message: message.substring(0, 200) }); return response.redirect(`/support/chats/${session.id}`); } catch (e) { return next(e); } }
 async function closeChat(request, response, next) { if (!safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid chat session.' }); try { const session = await chat.findChatSessionForUser(request.params.id, request.session.user); if (!session) return response.status(404).render('error', { statusCode: 404, message: 'Chat session not found.' }); await chat.closeChatSession(session.id, request.session.user); await staff.logActivity(request.session.user.id, 'chat_closed', 'chat_session', session.id); return response.redirect(`/support/chats/${session.id}`); } catch (e) { return next(e); } }
 async function assignChat(request, response, next) { if (!safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid chat session.' }); try { if (!await chat.findChatSessionForUser(request.params.id, request.session.user)) return response.status(404).render('error', { statusCode: 404, message: 'Chat session not found.' }); await chat.assignChat(request.params.id, request.session.user.id); await staff.logActivity(request.session.user.id, 'chat_assigned', 'chat_session', request.params.id); return response.redirect('/support/chats'); } catch (e) { return next(e); } }
 
-async function adminDashboard(request, response, next) { try { return response.render('admin/dashboard', { pageTitle: 'Administrator dashboard', tickets: await staff.listSupportTickets() }); } catch (e) { return next(e); } }
+async function adminDashboard(request, response, next) {
+	try {
+		const [users, tickets, sessions, logs] = await Promise.all([
+			staff.listUsers(),
+			staff.listSupportTickets(),
+			chat.listChatSessions(),
+			staff.listActivityLogs()
+		]);
+		return response.render('admin/dashboard', {
+			pageTitle: 'Administrator dashboard',
+			users,
+			tickets,
+			sessions,
+			logs,
+			metrics: {
+				users: users.length,
+				activeUsers: users.filter((user) => user.is_active).length,
+				openTickets: tickets.filter((ticket) => !['resolved', 'closed'].includes(ticket.status)).length,
+				activeChats: sessions.filter((session) => session.status !== 'closed').length
+			}
+		});
+	} catch (e) { return next(e); }
+}
 async function users(request, response, next) { try { return response.render('admin/users', { pageTitle: 'Users', users: await staff.listUsers() }); } catch (e) { return next(e); } }
 async function updateUser(request, response, next) { const role = String(request.body.role || 'student'); const isActive = request.body.isActive === 'true'; if (!['student', 'support_agent', 'administrator'].includes(role) || !safeId(request.params.id)) return response.status(400).render('error', { statusCode: 400, message: 'Invalid user update.' }); if (request.params.id === request.session.user.id && (role !== 'administrator' || !isActive)) return response.status(400).render('error', { statusCode: 400, message: 'You cannot remove or deactivate your own administrator access.' }); try { if (!await staff.findUser(request.params.id)) return response.status(404).render('error', { statusCode: 404, message: 'User not found.' }); await staff.updateUser(request.params.id, role, isActive); await staff.logActivity(request.session.user.id, 'user_updated', 'user', request.params.id, { role, isActive }); return response.redirect('/admin/users'); } catch (e) { return next(e); } }
 async function faqs(request, response, next) { try { return response.render('admin/faqs', { pageTitle: 'FAQ management', faqs: await staff.listFaqs() }); } catch (e) { return next(e); } }

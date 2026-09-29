@@ -1,12 +1,12 @@
 const {
   addTicketMessageForStudent,
-  countTicketsByStudent,
   createTicketWithMessage,
   findTicketByStudent,
   findTicketMessagesByStudent,
   findTicketsByStudent
 } = require('../models/ticket');
   const { createChatSession, findOpenChatForStudent, findChatSessionsByStudent } = require('../models/chat');
+const { query } = require('../config/database');
 
 const priorities = ['low', 'medium', 'high', 'urgent'];
 
@@ -44,15 +44,28 @@ function renderNewTicket(response, values, errors = []) {
 
 async function showDashboard(request, response, next) {
   try {
-    const [ticketCount, recentTickets] = await Promise.all([
-      countTicketsByStudent(request.session.user.id),
-      findTicketsByStudent(request.session.user.id)
+    const [tickets, activeChat, announcements] = await Promise.all([
+      findTicketsByStudent(request.session.user.id),
+      findOpenChatForStudent(request.session.user.id),
+      query(
+        `SELECT id, title, body, published_at, created_at
+         FROM announcements
+         WHERE is_published = true
+           AND (published_at IS NULL OR published_at <= CURRENT_TIMESTAMP)
+         ORDER BY COALESCE(published_at, created_at) DESC
+         LIMIT 3`
+      )
     ]);
 
     return response.render('student/dashboard', {
       pageTitle: 'Student portal',
-      ticketCount,
-      recentTickets: recentTickets.slice(0, 5)
+      metrics: {
+        openTickets: tickets.filter((ticket) => !['resolved', 'closed'].includes(ticket.status)).length,
+        resolvedTickets: tickets.filter((ticket) => ['resolved', 'closed'].includes(ticket.status)).length,
+        hasActiveChat: Boolean(activeChat)
+      },
+      recentTickets: tickets.slice(0, 5),
+      announcements: announcements.rows
     });
   } catch (error) {
     return next(error);
@@ -189,7 +202,7 @@ async function showChat(request, response, next) {
     return response.render('student/chat', {
       pageTitle: 'Live support chat',
       sessions,
-      activeSession: sessions[0] || null
+      activeSession: sessions.find((session) => session.status !== 'closed') || sessions[0] || null
     });
   } catch (error) {
     return next(error);

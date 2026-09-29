@@ -1,6 +1,4 @@
-<%- include('../partials/head', { pageTitle }) %>
-<%- include('../partials/navigation') %>
-<main class="page-shell portal-page">
+<%- include('../partials/app-start', { pageTitle }) %>
   <header class="page-intro page-intro-compact">
     <p class="eyebrow">Student portal / new request</p>
     <h1>Create a support ticket.</h1>
@@ -20,5 +18,4 @@
     <textarea id="message" name="message" rows="9" maxlength="10000" required><%= values.message %></textarea>
     <div class="button-row"><button class="button button-primary" type="submit">Submit ticket</button><a class="button button-quiet" href="/student/tickets">Cancel</a></div>
   </form>
-</main>
-<%- include('../partials/footer') %>
+<%- include('../partials/app-end') %>

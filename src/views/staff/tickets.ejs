@@ -1,1 +1,4 @@
-<%- include('../partials/head', { pageTitle }) %><%- include('../partials/navigation') %><main class="page-shell portal-page"><p class="eyebrow">Support workspace</p><h1>Support tickets.</h1><%- include('ticket-table', { tickets }) %></main><%- include('../partials/footer') %>
+<%- include('../partials/app-start', { pageTitle }) %>
+<header class="app-page-header"><p class="eyebrow">Support workspace</p><h1>Tickets</h1><p class="lead">Requests submitted by students, ordered by recent activity.</p></header>
+<section class="dashboard-section"><%- include('ticket-table', { tickets }) %></section>
+<%- include('../partials/app-end') %>

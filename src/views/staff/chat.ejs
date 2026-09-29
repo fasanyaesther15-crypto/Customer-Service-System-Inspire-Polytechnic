@@ -1,24 +1,10 @@
-<%- include('../partials/head', { pageTitle }) %>
-<%- include('../partials/navigation') %>
-<main class="page-shell portal-page">
-  <p class="eyebrow"><a href="/support/chats">Chat monitoring</a> / Chat session</p>
-  <h1>Chat session.</h1>
-  <p class="lead">Status: <%= session.status %></p>
-  <div class="message-list">
-    <% messages.forEach((message) => { %>
-      <article class="message-item"><div class="message-meta"><strong><%= message.sender_name %></strong><span><%= new Date(message.created_at).toLocaleString() %></span></div><p><%= message.message %></p></article>
-    <% }); %>
+<%- include('../partials/app-start', { pageTitle }) %>
+<header class="app-page-header"><p class="eyebrow"><a href="/support/chats">Chats</a> / Conversation</p><div class="chat-page-heading"><div><h1><%= session.student_name || 'Student conversation' %></h1><p class="lead">Live support conversation</p></div><span class="status-badge status-<%= session.status.replaceAll(' ', '-') %>" data-chat-status><%= session.status %></span></div></header>
+<section class="chat-workspace chat-workspace-agent" data-chat-session="<%= session.id %>" data-current-user="<%= currentUser.id %>" data-current-user-name="<%= currentUser.fullName %>" data-session-status="<%= session.status %>">
+  <aside class="chat-inbox-rail"><div class="inbox-heading"><h2>Conversations</h2><a href="/support/chats" aria-label="All conversations">All</a></div><% sessions.forEach((item) => { %><a class="conversation-item <%= item.id === session.id ? 'is-selected' : '' %>" href="/support/chats/<%= item.id %>"><span class="user-avatar"><%= item.student_name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase() %></span><span class="conversation-copy"><strong><%= item.student_name %></strong><small><%= item.last_message || item.status %></small></span></a><% }) %></aside>
+  <div class="chat-thread"><div class="chat-thread-heading"><span class="user-avatar"><%= (session.student_name || 'S').split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase() %></span><div><strong><%= session.student_name || 'Student' %></strong><span data-chat-connection>Connecting...</span></div><% if (session.status !== 'closed') { %><form method="post" action="/support/chats/<%= session.id %>/close"><button class="button button-quiet" type="submit">Close chat</button></form><% } %></div>
+    <div class="chat-messages" data-chat-messages aria-live="polite"><% messages.forEach((message) => { %><article class="chat-message" data-message-id="<%= message.id %>" data-sender-id="<%= message.sender_id %>"><span class="message-author"><%= message.sender_name %></span><p><%= message.message %></p><time datetime="<%= new Date(message.created_at).toISOString() %>"><%= new Date(message.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) %></time></article><% }) %></div>
+    <form method="post" action="/support/chats/<%= session.id %>/messages" class="chat-composer" data-chat-form><label class="sr-only" for="chat-reply">Reply to student</label><textarea id="chat-reply" name="message" maxlength="10000" placeholder="Write a reply..." required <%= session.status === 'closed' ? 'disabled' : '' %>></textarea><button class="button button-primary" type="submit" <%= session.status === 'closed' ? 'disabled' : '' %>>Send</button></form><p class="chat-error" data-chat-error role="alert"></p>
   </div>
-
-  <% if (session.status !== 'closed') { %>
-    <form method="post" action="/support/chats/<%= session.id %>/messages" class="chat-form">
-      <label for="message" class="sr-only">Reply</label>
-      <input id="message" name="message" type="text" maxlength="10000" placeholder="Type a reply" required>
-      <button class="button button-primary" type="submit">Send reply</button>
-    </form>
-    <form method="post" action="/support/chats/<%= session.id %>/close">
-      <button class="button button-quiet" type="submit">Close chat</button>
-    </form>
-  <% } %>
-</main>
-<%- include('../partials/footer') %>
+</section>
+<%- include('../partials/app-end') %>

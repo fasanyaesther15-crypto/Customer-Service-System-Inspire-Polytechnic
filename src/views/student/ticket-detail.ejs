@@ -1,6 +1,4 @@
-<%- include('../partials/head', { pageTitle }) %>
-<%- include('../partials/navigation') %>
-<main class="page-shell portal-page">
+<%- include('../partials/app-start', { pageTitle }) %>
   <p class="eyebrow"><a href="/student/tickets">My tickets</a> / Ticket details</p>
   <header class="ticket-header">
     <div><h1><%= ticket.subject %></h1><p class="lead"><%= ticket.category %> · Created <%= new Date(ticket.created_at).toLocaleDateString() %></p></div>
@@ -23,5 +21,4 @@
     </section>
     <aside class="ticket-facts"><p class="eyebrow">Ticket summary</p><dl><dt>Status</dt><dd><%= ticket.status %></dd><dt>Priority</dt><dd><%= ticket.priority %></dd><dt>Category</dt><dd><%= ticket.category %></dd><dt>Last updated</dt><dd><%= new Date(ticket.updated_at).toLocaleDateString() %></dd></dl></aside>
   </div>
-</main>
-<%- include('../partials/footer') %>
+<%- include('../partials/app-end') %>

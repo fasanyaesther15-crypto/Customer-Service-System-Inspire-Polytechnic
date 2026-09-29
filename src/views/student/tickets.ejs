@@ -1,21 +1,17 @@
-<%- include('../partials/head', { pageTitle }) %>
-<%- include('../partials/navigation') %>
-<main class="page-shell portal-page">
-  <header class="page-intro page-intro-compact page-heading-row">
-    <div><p class="eyebrow">Student portal</p><h1>My tickets.</h1><p class="lead">Review your support requests and their current status.</p></div>
+<%- include('../partials/app-start', { pageTitle }) %>
+  <header class="student-page-heading">
+    <div><p class="eyebrow">Student portal</p><h1>My tickets</h1><p class="lead">Review your requests, current status and recent activity.</p></div>
     <a class="button button-primary" href="/student/tickets/new">Create a ticket</a>
   </header>
   <% if (!tickets.length) { %>
-    <section class="empty-state"><p class="eyebrow">No support requests</p><h2>Your ticket list is empty.</h2><p>Create a ticket when you need help from the customer service team.</p><a class="button button-primary" href="/student/tickets/new">Create a ticket</a></section>
+    <section class="student-empty-state student-ticket-empty"><p class="eyebrow">No support requests</p><h2>Your ticket list is empty</h2><p>Create a ticket when you need help from the customer service team.</p><a class="button button-primary" href="/student/tickets/new">Create a ticket</a></section>
   <% } else { %>
-    <div class="ticket-list">
-      <% tickets.forEach((ticket) => { %>
-        <a class="ticket-row" href="/student/tickets/<%= ticket.id %>">
-          <span><strong><%= ticket.subject %></strong><small><%= ticket.category %> · <%= new Date(ticket.created_at).toLocaleDateString() %> · Updated <%= new Date(ticket.updated_at).toLocaleDateString() %></small></span>
-          <span class="ticket-meta"><span class="priority-label"><%= ticket.priority %></span><span class="status-badge status-<%= ticket.status.replaceAll(' ', '-') %>"><%= ticket.status %></span></span>
-        </a>
-      <% }); %>
-    </div>
+    <section class="student-ticket-directory" aria-label="Your support requests">
+      <div class="student-ticket-table-wrap"><table class="student-ticket-table"><thead><tr><th scope="col">Request</th><th scope="col">Status</th><th scope="col">Created</th><th scope="col">Last activity</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead><tbody>
+        <% tickets.forEach((ticket) => { %>
+          <tr><td data-label="Request"><span class="student-ticket-title"><strong><%= ticket.subject %></strong><small><%= ticket.category %> <span class="priority-badge priority-<%= ticket.priority %>"><%= ticket.priority %> priority</span></small></span></td><td data-label="Status"><span class="status-badge status-<%= ticket.status.replaceAll(' ', '-') %>"><%= ticket.status %></span></td><td data-label="Created"><time datetime="<%= new Date(ticket.created_at).toISOString() %>"><%= new Date(ticket.created_at).toLocaleDateString() %></time></td><td data-label="Last activity"><time datetime="<%= new Date(ticket.updated_at).toISOString() %>"><%= new Date(ticket.updated_at).toLocaleDateString() %></time></td><td data-label="Action"><a class="student-view-link" href="/student/tickets/<%= ticket.id %>">View <span aria-hidden="true">&#8594;</span></a></td></tr>
+        <% }); %>
+      </tbody></table></div>
+    </section>
   <% } %>
-</main>
-<%- include('../partials/footer') %>
+<%- include('../partials/app-end') %>

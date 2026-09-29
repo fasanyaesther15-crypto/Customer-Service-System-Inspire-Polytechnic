@@ -7,4 +7,4 @@
   <title><%= pageTitle ? `${pageTitle} | Inspire Polytechnic Customer Service` : 'Inspire Polytechnic Customer Service' %></title>
   <link rel="stylesheet" href="/css/style.css?v=nav-glass-2">
 </head>
-<body>
+<body class="<%= typeof bodyClass === 'undefined' ? '' : bodyClass %>"<% if (typeof workspaceRole !== 'undefined' && workspaceRole) { %> data-workspace-role="<%= workspaceRole %>"<% } %>>

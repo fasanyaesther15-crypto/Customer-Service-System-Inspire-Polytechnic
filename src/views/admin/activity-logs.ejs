@@ -1,1 +1,17 @@
-<%- include('../partials/head', { pageTitle }) %><%- include('../partials/navigation') %><main class="page-shell portal-page"><p class="eyebrow">Administration</p><h1>Activity logs.</h1><div class="ticket-list"><% logs.forEach((log) => { %><div class="ticket-row"><span><strong><%= log.action %></strong><small><%= log.actor_name || 'System' %> · <%= new Date(log.created_at).toLocaleString() %></small></span></div><% }) %></div></main><%- include('../partials/footer') %>
+<%- include('../partials/app-start', { pageTitle }) %>
+<header class="app-page-header"><p class="eyebrow">Administration</p><h1>Activity logs</h1><p class="lead">System and administrative activity recorded by the service.</p></header>
+<section class="activity-panel" aria-label="Activity history">
+	<div class="activity-toolbar"><label class="directory-search"><span class="sr-only">Search activity</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input type="search" placeholder="Search action or actor..." data-activity-search></label><label><span class="sr-only">Filter by activity type</span><select data-activity-category><option value="">All activity types</option><option>Users</option><option>Support</option><option>Content</option><option>Access</option><option>System</option></select></label><label><span class="sr-only">Filter by date</span><select data-activity-date><option value="">Any date</option><option value="today">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label></div>
+	<% if (!logs.length) { %><div class="inline-empty">No activity has been recorded yet.</div><% } else { %>
+		<div class="activity-feed" data-activity-feed>
+			<% let previousDate = ''; logs.forEach((log) => { const date = new Date(log.created_at); const dateLabel = date.toLocaleDateString(); const today = new Date(); const yesterday = new Date(); yesterday.setDate(today.getDate() - 1); const heading = date.toDateString() === today.toDateString() ? 'Today' : date.toDateString() === yesterday.toDateString() ? 'Yesterday' : dateLabel; const actionKey = String(log.action || 'system event').toLowerCase(); const category = actionKey.includes('user') ? 'Users' : actionKey.includes('ticket') || actionKey.includes('chat') ? 'Support' : actionKey.includes('faq') || actionKey.includes('announcement') ? 'Content' : actionKey.includes('login') || actionKey.includes('logout') ? 'Access' : 'System'; const actionTitle = String(log.action || 'System event').replaceAll('_', ' '); %>
+				<% if (heading !== previousDate) { previousDate = heading; %><h2 class="activity-date-heading"><%= heading %></h2><% } %>
+				<article class="activity-entry" data-activity-entry data-search="<%= `${actionTitle} ${log.actor_name || 'System'}`.toLowerCase() %>" data-category="<%= category %>" data-date="<%= date.toISOString() %>">
+					<span class="activity-marker" aria-hidden="true"><%= category.slice(0, 1) %></span><time datetime="<%= date.toISOString() %>"><%= date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) %></time><div class="activity-entry-content"><strong><%= actionTitle %></strong><span><%= log.actor_name || 'System' %></span></div><span class="activity-category category-<%= category.toLowerCase() %>"><%= category %></span>
+				</article>
+			<% }) %>
+			<p class="inline-empty" data-activity-empty hidden>No activity matches these filters.</p>
+		</div>
+	<% } %>
+</section>
+<%- include('../partials/app-end') %>

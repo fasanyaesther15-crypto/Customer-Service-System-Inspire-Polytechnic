@@ -1,1 +1,26 @@
-<%- include('../partials/head', { pageTitle }) %><%- include('../partials/navigation') %><main class="page-shell portal-page"><p class="eyebrow">Administration</p><h1>Administrator dashboard.</h1><p class="lead">Manage the service records and review support activity.</p><div class="button-row"><a class="button button-primary" href="/admin/users">Users</a><a class="button button-quiet" href="/admin/faqs">FAQs</a><a class="button button-quiet" href="/admin/announcements">Announcements</a><a class="button button-quiet" href="/admin/activity-logs">Activity logs</a></div><%- include('../staff/ticket-table', { tickets }) %></main><%- include('../partials/footer') %>
+<%- include('../partials/app-start', { pageTitle }) %>
+<header class="app-page-header"><p class="eyebrow">Administration</p><h1>Administrator dashboard</h1><p class="lead">Manage accounts, content and support activity across the service.</p></header>
+<section class="metric-grid" aria-label="Service overview">
+	<article class="metric-card"><span>Total users</span><strong><%= metrics.users %></strong></article>
+	<article class="metric-card"><span>Active users</span><strong><%= metrics.activeUsers %></strong></article>
+	<article class="metric-card"><span>Open tickets</span><strong><%= metrics.openTickets %></strong></article>
+	<article class="metric-card"><span>Active chats</span><strong><%= metrics.activeChats %></strong></article>
+</section>
+<section class="dashboard-section">
+	<div class="section-heading"><div><p class="eyebrow">Quick actions</p><h2>Administration</h2></div></div>
+	<nav class="quick-action-list" aria-label="Administrative quick actions">
+		<a href="/admin/users"><strong>Manage users</strong><span>Roles and account status</span></a>
+		<a href="/admin/faqs"><strong>Manage FAQs</strong><span>Student help content</span></a>
+		<a href="/admin/announcements"><strong>Manage announcements</strong><span>Published notices and drafts</span></a>
+		<a href="/admin/activity-logs"><strong>View activity</strong><span>Recent administrative events</span></a>
+		<a href="/support/tickets"><strong>View tickets</strong><span>Support queue</span></a>
+		<a href="/support/chats"><strong>View chats</strong><span>Student conversations</span></a>
+	</nav>
+</section>
+<div class="dashboard-columns">
+	<section class="dashboard-section"><div class="section-heading"><div><p class="eyebrow">Support</p><h2>Recent tickets</h2></div><a class="text-link" href="/support/tickets">All tickets</a></div><%- include('../staff/ticket-table', { tickets: tickets.slice(0, 5) }) %></section>
+	<section class="dashboard-section"><div class="section-heading"><div><p class="eyebrow">System</p><h2>Recent activity</h2></div><a class="text-link" href="/admin/activity-logs">All activity</a></div>
+		<% if (!logs.length) { %><p class="inline-empty">No recorded activity yet.</p><% } else { %><ul class="recent-activity-list"><% logs.slice(0, 6).forEach((log) => { %><li><strong><%= log.action.replaceAll('_', ' ') %></strong><span><%= log.actor_name || 'System' %> · <%= new Date(log.created_at).toLocaleString() %></span></li><% }) %></ul><% } %>
+	</section>
+</div>
+<%- include('../partials/app-end') %>
