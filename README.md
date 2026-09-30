@@ -276,15 +276,15 @@ Prerequisites are Node.js, npm, and a Supabase project or compatible PostgreSQL 
 5. Start the Express application with the project development script.
 6. Run the documented tests before making a deployment build.
 
-Phase 5 includes the authenticated student portal and student-owned support ticket workflow. Support-agent/admin ticket handling, FAQ automation, live chat, and advanced student features remain unimplemented.
+The application is implemented and deployed. For visitor access, use the demo accounts listed in the Live Demo and Contact section; do not enter real student or institutional data.
 
 ## 24. Supabase Setup
 
 Create a Supabase project, copy its PostgreSQL connection information, and store it in `DATABASE_URL`. Apply the schema described in [docs/database.md](docs/database.md). Enable database backups and use least-privilege credentials appropriate to the deployment. Supabase is used for PostgreSQL hosting and persistence; the application remains responsible for authentication, authorization, and business rules.
 
-## 25. Render Deployment Plan
+## 25. Render Deployment
 
-The Express application is deployed as a Render Node web service to preserve the required Socket.IO connection model. Production environment variables are configured in Render's environment settings, including `NODE_ENV`, `PORT`, `DATABASE_URL`, and `SESSION_SECRET`. The deployment uses Supabase for persistent data and verifies session cookies, database connectivity, protected routes, and Socket.IO behavior before release.
+The Express application is deployed as a Render Node web service to preserve the required Socket.IO connection model. The live application is available at [customer-service-system-inspire.onrender.com](https://customer-service-system-inspire.onrender.com/). Production environment variables are configured in Render's environment settings, including `NODE_ENV`, `PORT`, `DATABASE_URL`, and `SESSION_SECRET`.
 
 ## 26. Git Workflow
 
@@ -304,6 +304,22 @@ The Express application is deployed as a Render Node web service to preserve the
 - [Testing](docs/testing.md)
 - [Deployment](docs/deployment.md)
 
+## Live Demo and Contact
+
+**Live application:** [https://customer-service-system-inspire.onrender.com/](https://customer-service-system-inspire.onrender.com/)
+
+Use these demo accounts to explore the application:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Administrator | `admin@inspirepolytechnic.edu` | `Admin123!` |
+| Customer Support | `qa.admin@inspirepolytechnic.test` | `AdminPass123!` |
+| Student | `example@gmail.com` | `Password123` |
+
+These credentials are public demo access, not private accounts. Do not use them for real student or institutional data. Anyone with the administrator credentials can access administrator functions on the live deployment.
+
+**Software development enquiries:** [WhatsApp +234 810 702 4396](https://wa.me/2348107024396)
+
 ## Project Status
 
-Phase 8 support-agent and administrator workflows complete. Deployment remains, and no later functionality beyond the documented chat/support/administration scope is implemented.
+**Completed and deployed to Render.** The live service is available at [customer-service-system-inspire.onrender.com](https://customer-service-system-inspire.onrender.com/).
