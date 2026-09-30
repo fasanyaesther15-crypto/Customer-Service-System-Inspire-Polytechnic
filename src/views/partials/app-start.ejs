@@ -64,6 +64,12 @@
       <header class="workspace-topbar">
         <button class="workspace-menu-toggle" type="button" aria-expanded="false" aria-controls="workspace-sidebar" aria-label="Open workspace navigation" data-sidebar-open><span></span><span></span><span></span></button>
         <div class="workspace-topbar-title"><span><%= role === 'administrator' ? 'Administration' : role === 'support_agent' ? 'Support workspace' : 'Student portal' %></span><strong><%= pageTitle %></strong></div>
-        <a class="workspace-home-link" href="/">Institution website</a>
+        <a class="workspace-home-link" href="/" aria-label="Back to home page">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11.5 12 4l9 7.5"></path>
+            <path d="M5 10.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8.5"></path>
+            <path d="M9.5 20v-6h5v6"></path>
+          </svg>
+        </a>
       </header>
       <main class="workspace-content">
